@@ -16,30 +16,27 @@ HDC mydc = GetDC(myconsole);
 
 int window_size; // Taille de l'affichage
 
-int Gap_x = 200; // Décalage en X
-int Gap_y = 100; // Décalage en Y
+int Gap_x = 200; // DÃ©calage en X
+int Gap_y = 100; // DÃ©calage en Y
 
-double color_constant = 7.; // Constante permettant d'améliorer les couleurs
+double color_constant = 7.; // Constante permettant d'amÃ©liorer les couleurs
 
-double sequence_max = 10.; // Le calcul de la suite s'arrête quand elle atteint cette valeur
+double sequence_max = 10.; // Le calcul de la suite s'arrÃªte quand elle atteint cette valeur
 
 
 
-// Affiche un pixel aux coordonnées voulues
+// Affiche un pixel aux coordonnÃ©es voulues
 
-void set_point(int x, int y, COLORREF color)
+void set_point(const int &x, const int &y, const COLORREF &color)
 {
-	x = Gap_x + x;
-	y = Gap_y + window_size - y;
-
-	SetPixel(mydc, x, y, color);
+	SetPixel(mydc, Gap_x + x, Gap_y + window_size - y, color);
 }
 
 
 
-// Donne une couleur à partir du temps que prend la suite à diverger
+// Donne une couleur Ã  partir du temps que prend la suite Ã  diverger
 
-COLORREF color(int value, int max_value)
+COLORREF color(int value, const int &max_value)
 {
 	value *= color_constant;
 
@@ -75,7 +72,7 @@ void contour()
 
 
 
-// ---------- Génération de la forme fractale ----------
+// ---------- GÃ©nÃ©ration de la forme fractale ----------
 
 
 
@@ -83,7 +80,7 @@ enum Fractale_type {Julia, Mandelbrot}; // Type de fractale
 
 
 
-// Création d'une classe définissant un nombre complexe
+// CrÃ©ation d'une classe dÃ©finissant un nombre complexe
 
 class Complex
 {
@@ -91,12 +88,6 @@ public :
 
 	double a;
 	double b;
-	
-	Complex(double a, double b)
-	{
-		this->a = a;
-		this->b = b;
-	}
 
 	Complex()
 	{
@@ -104,7 +95,19 @@ public :
 		b = 0;
 	}
 
-	void operator=(Complex z)
+	Complex(const Complex &z)
+	{
+		a = z.a;
+		b = z.b;
+	}
+
+	Complex(const double& a, const double& b)
+	{
+		this->a = a;
+		this->b = b;
+	}
+
+	void operator=(const Complex &z)
 	{
 		a = z.a;
 		b = z.b;
@@ -116,37 +119,25 @@ public :
 	}
 };
 
-Complex operator*(Complex z_1, Complex z_2) // Multiplication
+Complex operator+(const Complex &z_1, const Complex &z_2) // Addition
 {
-	Complex z_3;
-
-	z_3.a = z_1.a * z_2.a - z_1.b * z_2.b;
-	z_3.b = z_1.a * z_2.b + z_1.b * z_2.a;
-
-	return z_3;
+	return Complex(z_1.a + z_2.a, z_1.b + z_2.b);
 }
 
-Complex operator+(Complex z_1, Complex z_2) // Addition
+Complex operator*(const Complex& z_1, const Complex& z_2) // Multiplication
 {
-	Complex z_3;
-
-	z_3.a = z_1.a + z_2.a;
-	z_3.b = z_1.b + z_2.b;
-
-	return z_3;
+	return Complex(z_1.a * z_2.a - z_1.b * z_2.b, z_1.a * z_2.b + z_1.b * z_2.a);
 }
 
 
 
-// Calcul la suite d'équation z = z² + c et renvoie le nombre d'itérations pour atteindre "sequence_max"
+// Calcul la suite d'Ã©quation z = zÂ² + c et renvoie le nombre d'itÃ©rations pour atteindre "sequence_max"
 
-int Sequence(Complex z, Complex c, int iteration_nb)
+int sequence(Complex z, const Complex &c, const int &iteration_nb)
 {
-	Complex temp;
-
 	for (int i = 0; i < iteration_nb; i++)
 	{
-		z = z * z + c; // L'équation
+		z = z * z + c; // L'Ã©quation
 
 		if (z.modulus() > sequence_max)
 			return i;
@@ -159,38 +150,38 @@ int Sequence(Complex z, Complex c, int iteration_nb)
 
 // Affiche l'image en entier de la forme fractale
 
-void show_image(double p_x, double p_y, double zoom, int iteration_nb, Fractale_type fractale_type, Complex c = Complex(0, 0))
+void show_image(const double &p_x, const double &p_y, const double &graph_size, const int &iteration_nb, const Fractale_type &fractale_type, const Complex &c)
 {
-	double x = p_x - zoom / 2;
-	double y = p_y - zoom / 2;
-	double x_pas = zoom / double(window_size);
-	double y_pas = zoom / double(window_size);
+	double x = p_x - graph_size / 2.;
+	double y = p_y - graph_size / 2.;
+	double x_pas = graph_size / double(window_size);
+	double y_pas = graph_size / double(window_size);
 
 	for (int i = 0; i < window_size; i++)
 	{
-		x = p_x - zoom / 2;
+		x = p_x - graph_size / 2;
 		y += y_pas;
 
 		for (int j = 0; j < window_size; j++)
 		{
 			x += x_pas;
 
-			int s;
+			int sequence_result;
 
 			if (fractale_type == Julia)
 			{
 				Complex z = Complex(x, y);
-				s = Sequence(z, c, iteration_nb);
+				sequence_result = sequence(z, c, iteration_nb);
 			}
 
 			else
 			{
 				Complex c = Complex(x, y);
-				s = Sequence(Complex(0, 0), c, iteration_nb);
+				sequence_result = sequence(Complex(0, 0), c, iteration_nb);
 			}
 
-			if (s != iteration_nb)
-				set_point(j, i, color(s, iteration_nb));
+			if (sequence_result != iteration_nb)
+				set_point(j, i, color(sequence_result, iteration_nb));
 		}
 	}
 }
