@@ -17,11 +17,15 @@ int main(int argc, char* argv[])
 	double			x = -0.75;					// Coordonnée x du centre de la vue
 	double			y = 0.;						// Coordonnée y du centre de la vue
 
+	int				window_size = 800;			// Taille de la fenêtre (en pixels)
 	double			graph_size = 3.;			// Taille de la vue (zoom)
 	int				iteration_nb = 250;			// Nombre d'intérations de la suite (précision)
 
 	Fractale_type	fractale_type = Mandelbrot;	// Type de fractale (Mandelbrot ou Julia)
 	Complex			c = Complex(-0.55, 0.55);	// Valeur de c (pour Julia)
+
+	double			color_constant = 7.;		// Constante permettant d'améliorer les couleurs
+	double			sequences_max = 10.;		// Le calcul de la suite s'arrête quand elle atteint cette valeur
 
 
 
@@ -34,7 +38,7 @@ int main(int argc, char* argv[])
 	window = NULL;
 	renderer = NULL;
 
-	SDL_CreateWindowAndRenderer(WIDTH, HEIGHT, 0, &window, &renderer);
+	SDL_CreateWindowAndRenderer(window_size, window_size, 0, &window, &renderer);
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_ADD);
 	SDL_SetWindowTitle(window, "Fractal generator");
 	SDL_Event event;
@@ -44,8 +48,7 @@ int main(int argc, char* argv[])
 
 	SDL_RenderPresent(renderer);
 
-	contour();
-	show_image(x, y, graph_size, iteration_nb, fractale_type, c, event);
+	show_image(x, y, graph_size, iteration_nb, fractale_type, c, event, window_size, color_constant, sequences_max);
 
 	SDL_RenderPresent(renderer);
 
