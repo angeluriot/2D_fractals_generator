@@ -31,7 +31,7 @@ Voici plusieurs tests faits à partir du programme :
 <br/>
 
 <p align="center">
-	<img src="https://i.imgur.com/wNoP95K.jpeg" width="700">
+	<img src="https://i.imgur.com/h5Z4l5x.png" width="700">
 </p>
 
 <p align="center">
