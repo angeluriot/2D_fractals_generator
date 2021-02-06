@@ -6,7 +6,11 @@ Simulation::Simulation()
 {
 	void_image.create(WIDTH, HEIGHT, sf::Color(0, 0, 0, 0));
 
-	images.fill(void_image);
+	thread_nb = std::max((int)std::thread::hardware_concurrency() - FREE_THREAD, 1);
+
+	images.assign(thread_nb, void_image);
+	
+	finished = std::vector<std::atomic<bool>>(thread_nb);
 	std::fill(finished.begin(), finished.end(), false);
 
 	texture.create(WIDTH, HEIGHT);
@@ -127,13 +131,15 @@ void Simulation::simulate(My_event& my_event)
 {
 	bool image_finished = true;
 
-	images.fill(void_image);
+	images.assign(thread_nb, void_image);
+
+	finished = std::vector<std::atomic<bool>>(thread_nb);
 	std::fill(finished.begin(), finished.end(), false);
 
-	std::array<std::thread, THREAD_NB> threads;
+	std::vector<std::thread> threads(thread_nb);
 
 	for (uint8_t i = 0; i < threads.size(); i++)
-		threads[i] = std::thread([this, i]() { draw_fractal((HEIGHT / static_cast<double>(THREAD_NB)) * i, (HEIGHT / static_cast<double>(THREAD_NB)) * (i + 1), i); });
+		threads[i] = std::thread([this, i]() { draw_fractal((HEIGHT / static_cast<double>(thread_nb)) * i, (HEIGHT / static_cast<double>(thread_nb)) * (i + 1), i); });
 
 	while (!std::all_of(finished.begin(), finished.end(), [](bool i) -> bool { return i; }))
 		if (!my_event.check())

@@ -21,12 +21,12 @@ extern int screen_width; // Largeur de l'écran
 #define WIDTH			1920							// Largeur de l'écran
 #define HEIGHT			1080							// Hauteeur de l'écran
 #define RESIZE			((1. / 1920.) * screen_width)	// Coéfficent en fonction de la taille de l'écran
+#define FREE_THREAD		2								// 
 
-#define MANDELBROT		0								//
-#define JULIA			1								//
+#define MANDELBROT		0
+#define JULIA			1
 #define SEQUENCE_MAX	2.2								// Valeur limite du modulo du complexe pour arrêter la suite
 #define SEQUENCE_MAX2	5.								// Carré de la valeur limite du modulo du complexe pour arrêter la suite
-#define THREAD_NB		16								// Nombre de coeurs utilisés par le CPU
 
 #define HSV_MIN			185								// Couleur min
 #define HSV_MAX			271								// Couleur max
