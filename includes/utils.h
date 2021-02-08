@@ -21,7 +21,7 @@ extern int screen_width; // Largeur de l'écran
 #define WIDTH			1920							// Largeur de l'écran
 #define HEIGHT			1080							// Hauteeur de l'écran
 #define RESIZE			((1. / 1920.) * screen_width)	// Coéfficent en fonction de la taille de l'écran
-#define FREE_THREAD		2								// 
+#define FREE_THREAD		2								// Nombre de threads libres
 
 #define MANDELBROT		0
 #define JULIA			1
