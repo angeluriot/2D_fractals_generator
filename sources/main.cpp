@@ -50,7 +50,7 @@ int main()
 
 	// lancement de la simulation
 
-	while (window.isOpen() and !end)
+	while (window.isOpen() && !end)
 	{
 		window.clear(sf::Color::Black);
 		
