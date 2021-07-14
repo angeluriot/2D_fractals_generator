@@ -1,49 +1,59 @@
-# Fractal generator
+# 2D fractal generator
 
-![release](https://img.shields.io/badge/release-v3.1-blueviolet)
-![language](https://img.shields.io/badge/language-C%2B%2B-0052cf)
-![library](https://img.shields.io/badge/library-SFML-00cf2c)
-![size](https://img.shields.io/badge/size-32%20Mo-f12222)
-![license](https://img.shields.io/badge/license-CC--0-0bb9ec)
+![Release](https://img.shields.io/badge/Release-v3.1-blueviolet)
+![Language](https://img.shields.io/badge/Language-C%2B%2B-0052cf)
+![Library](https://img.shields.io/badge/Library-SFML-00cf2c)
+![Size](https://img.shields.io/badge/Size-32%20Mo-f12222)
+![Open Source](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)
 
 <br/>
 
-Ce dépôt contient le code source d'un générateur de formes fractales (l'ensemble de **Julia** et de **Mandelbrot**).
+This program generate images of fractals like the Mandelbrot or the Julia set.
 
 <br/>
 
 <p align="center">
-	<img src="https://i.imgur.com/TZCJbUn.gif" width="700">
+	<img src="https://www.angeluriot.com/portfolio/resources/gif/Fractal.gif" width="700">
 </p>
 
 <br/>
 
-# Utilisation
+# Dependencies
 
-Le zoom avant/arrière se fait avec la molette de la souris, pour passer de Mandelbrot à Julia il faut cliquer sur la molette et pour passer à l'ensemble de Julia suivant/précédent, c'est avec le bouton gauche et droit de la souris, si vous souhaitez uniquement tester la simulation, vous pouvez consulter les [Releases](https://github.com/angeluriot/Fractal_generator/releases).
+* SFML
+
+<br/>
+
+# Features
+
+* Zoom with the mouse wheel.
+
+* Switch from Mandelbrot to Julia and vice versa with a mouse wheel click.
+
+* Go to the previous/next Julia set with a left/right click of the mouse.
 
 <br/>
 
 # Tests
 
-Voici plusieurs tests faits à partir du programme :
+<p align="center">
+	<img src="https://i.imgur.com/TZv5giO.png" width="500">
+</p>
+
+<p align="center">
+	<img src="https://i.imgur.com/h5Z4l5x.png" width="500">
+</p>
+
+<p align="center">
+	<img src="https://i.imgur.com/vQLyXym.png" width="500">
+</p>
+
+<p align="center">
+	<img src="https://i.imgur.com/R9jG4aZ.png" width="500">
+</p>
 
 <br/>
 
-<p align="center">
-	<img src="https://i.imgur.com/h5Z4l5x.png" width="700">
-</p>
+# Credits
 
-<p align="center">
-	<img src="https://i.imgur.com/vQLyXym.png" width="700">
-</p>
-
-<p align="center">
-	<img src="https://i.imgur.com/R9jG4aZ.png" width="700">
-</p>
-
-<br/>
-
-# Crédits
-
-* [Angel Uriot](https://github.com/angeluriot) : Créateur du projet.
+* [**Angel Uriot**](https://github.com/angeluriot) : Creator of the project.
