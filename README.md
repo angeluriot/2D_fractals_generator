@@ -30,7 +30,7 @@ This program generate images of fractals like the Mandelbrot or the Julia set.
 
 * Switch from Mandelbrot to Julia and vice versa with a mouse wheel click.
 
-* Go to the previous/next Julia set with a left/right click of the mouse.
+* Go to the previous/next Julia set with a left/right click.
 
 <br/>
 
