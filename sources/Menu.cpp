@@ -73,7 +73,10 @@ void Menu::display()
 		ImGui::Combo("##fractal_type", reinterpret_cast<int*>(&fractal_type), "Julia\0Mandelbrot");
 
 		if (fractal_type != temp)
+		{
 			set_default_values();
+			Simulator::reset();
+		}
 
 		active = ImGui::IsWindowFocused();
 

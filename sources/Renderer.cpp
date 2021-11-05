@@ -3,6 +3,11 @@
 
 void Renderer::init()
 {
+	dim::Shader::add("julia", "julia.vert", "julia.frag");
+}
+
+void Renderer::change_type()
+{
 	
 }
 
@@ -21,5 +26,5 @@ void Renderer::clear()
 
 void Renderer::draw()
 {
-	
+
 }

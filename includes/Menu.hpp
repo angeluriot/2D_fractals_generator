@@ -4,16 +4,6 @@
 #include "libraries.hpp"
 
 /**
- * @brief The type of the fractal
- */
-enum class FractalType : int
-{
-	Julia		= 0,	// A unique galaxy.
-	Mandelbrot	= 1,	// Two galaxies colliding.
-	Universe	= 2		// The big bang.
-};
-
-/**
  * @brief The window to edit the settings of the simulation.
  */
 class Menu

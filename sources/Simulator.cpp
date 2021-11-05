@@ -5,6 +5,11 @@ void Simulator::init()
 	Renderer::init();
 }
 
+void Simulator::reset()
+{
+	
+}
+
 void Simulator::update()
 {
 	
