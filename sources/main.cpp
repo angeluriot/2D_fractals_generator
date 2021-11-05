@@ -1,73 +1,43 @@
-#include "simulation.h"
+#include <dim/dimension3D.hpp>
+#include "Simulator.hpp"
 
 int main()
 {
-	// Initialisation de la fenêtre en fonction de l'écran
+	dim::Window::open("Galaxy simulation", 0.75f, "resources/icons/icon.png");
+	Simulator::init();
 
-	int width;
-	int height;
-
-	if (sf::VideoMode::getDesktopMode().width > (16. / 9.) * sf::VideoMode::getDesktopMode().height)
+	// The computation thread.
+	std::thread simulation_thread([]()
 	{
-		height = (sf::VideoMode::getDesktopMode().height * 3) / 4;
-		width = (height * 16) / 9;
-	}
+		while (dim::Window::running)
+			Simulator::compute_update();
+	});
 
-	else if (sf::VideoMode::getDesktopMode().width < (16. / 9.) * sf::VideoMode::getDesktopMode().height)
+	// The render thread.
+	while (dim::Window::running)
 	{
-		width = (sf::VideoMode::getDesktopMode().width * 3) / 4;
-		height = (width * 9) / 16;
-	}
-
-	else
-	{
-		width = (sf::VideoMode::getDesktopMode().width * 3) / 4;
-		height = (sf::VideoMode::getDesktopMode().height * 3) / 4;
-	}
-
-	screen_width = width;
-	
-	sf::RenderWindow window(sf::VideoMode(width, height), "Fractal Generator", sf::Style::Close | sf::Style::Titlebar);
-
-	sf::Image icon;
-	icon.loadFromFile("dependencies/resources/icon.png");
-
-	window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
-
-	bool end = false;
-	int16_t wheel_move = 0;
-
-	sf::Mouse mouse;
-	sf::Cursor cursor;
-	sf::Event sf_event;
-
-	cursor.loadFromSystem(sf::Cursor::Cross);
-	window.setMouseCursor(cursor);
-
-	Simulation simulation;
-	My_event my_event(&sf_event, &window, &end, &wheel_move, &simulation);
-	simulation.simulate(my_event);
-
-	// lancement de la simulation
-
-	while (window.isOpen() && !end)
-	{
-		window.clear(sf::Color::Black);
-		
-		if (!simulation.change)
-			my_event.wait();
-
-		if (simulation.change)
+		// Check the events.
+		sf::Event sf_event;
+		while (dim::Window::poll_event(sf_event))
 		{
-			cursor.loadFromSystem(sf::Cursor::Wait);
-			window.setMouseCursor(cursor);
-
-			simulation.update(my_event, mouse);
-
-			cursor.loadFromSystem(sf::Cursor::Cross);
-			window.setMouseCursor(cursor);
+			dim::Window::check_events(sf_event);
+			Menu::check_events(sf_event);
+			Simulator::check_events(sf_event);
 		}
+
+		dim::Window::get_controller().enable(!Menu::active || !Menu::visible, dim::Controller::Action::Look);
+
+		dim::Window::clear(dim::Color::black);
+		dim::Window::update();
+
+		Simulator::render_update();
+		Simulator::draw();
+
+		Menu::display();
+		dim::Window::display();
 	}
 
-	return 0;
+	simulation_thread.join();
+	dim::Window::close();
+	return EXIT_SUCCESS;
 }
