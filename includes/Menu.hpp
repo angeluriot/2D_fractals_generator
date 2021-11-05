@@ -4,12 +4,12 @@
 #include "libraries.hpp"
 
 /**
- * @brief The type of simulation.
+ * @brief The type of the fractal
  */
-enum class SimulationType : int
+enum class FractalType : int
 {
-	Galaxy		= 0,	// A unique galaxy.
-	Collision	= 1,	// Two galaxies colliding.
+	Julia		= 0,	// A unique galaxy.
+	Mandelbrot	= 1,	// Two galaxies colliding.
 	Universe	= 2		// The big bang.
 };
 
@@ -22,17 +22,7 @@ public:
 
 	static bool				visible;			// True if the menu is visible, false otherwise.
 	static bool				active;				// True if you clicked on the menu, false otherwise.
-	static bool				pause;				// True if the simulation is paused, false otherwise.
-	static SimulationType	simulation_type;	// The type of the simulation.
-	static float			step;				// The time step of the simulation.
-	static float			smoothing_length;	// The smoothing length of the gravitational force.
-	static float			interaction_rate;	// The proportion of interactive stars.
-	static int				nb_stars;			// The number of stars.
-	static float			galaxy_diameter;	// The diameter of the galaxy.
-	static float			galaxy_thickness;	// The thickness of the galaxy.
-	static float			galaxies_distance;	// The distance between the galaxies.
-	static float			stars_speed;		// The initial speed of the stars.
-	static float			black_hole_mass;	// The mass of the black hole.
+	static FractalType		fractal_type;		// The type of the fractal.
 
 	/**
 	 * @brief Handle the events of the menu.
@@ -64,19 +54,14 @@ public:
 	static void set_default_values();
 
 	/**
-	 * @brief Show the galaxy settings.
+	 * @brief Show the Julia settings.
 	 */
-	static void galaxy();
+	static void julia();
 
 	/**
-	 * @brief Show the collision settings.
+	 * @brief Show the Mandelbrot settings.
 	 */
-	static void collision();
-
-	/**
-	 * @brief Show the universe settings.
-	 */
-	static void universe();
+	static void mandelbrot();
 
 	/**
 	 * @brief Show the settings.
