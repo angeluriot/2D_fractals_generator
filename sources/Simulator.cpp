@@ -45,15 +45,18 @@ dim::Vector2int Simulator::world_to_screen(dim::Vector2 pos)
 
 void Simulator::update()
 {
-	static dim::Vector2int prev_mouse_pos = sf::Mouse::getPosition();
+	static dim::Vector2int prev_mouse_pos = sf::Mouse::getPosition(dim::Window::get_window());
 
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && !Menu::active)
+	dim::Vector2int mouse_pos = sf::Mouse::getPosition(dim::Window::get_window());
+
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && !Menu::active && mouse_pos.x >= 0 && mouse_pos.x <= dim::Window::get_size().x &&
+		mouse_pos.y >= 0 && mouse_pos.y <= dim::Window::get_size().y)
 	{
-		position -= screen_to_world(sf::Mouse::getPosition()) - screen_to_world(prev_mouse_pos);
+		position -= screen_to_world(mouse_pos) - screen_to_world(prev_mouse_pos);
 		image_done = false;
 	}
 
-	prev_mouse_pos = sf::Mouse::getPosition();
+	prev_mouse_pos = sf::Mouse::getPosition(dim::Window::get_window());
 }
 
 void Simulator::check_events(const sf::Event& sf_event)
