@@ -1,18 +1,11 @@
 #ifndef SIMULATOR_HPP
 #define SIMULATOR_HPP
 
-#include "Menu.hpp"
-#include "Renderer.hpp"
-
-/**
- * @brief The type of the fractal
- */
-enum class FractalType : int
-{
-	Julia		= 0,	// A unique galaxy.
-	Mandelbrot	= 1,	// Two galaxies colliding.
-	Universe	= 2		// The big bang.
-};
+#include "menu/Menu.hpp"
+#include "renderer/Renderer.hpp"
+#include "fractals/Fractal.hpp"
+#include "fractals/Julia.hpp"
+#include "fractals/Mandelbrot.hpp"
 
 /**
  * @brief A static class representing the simulation.
@@ -20,6 +13,11 @@ enum class FractalType : int
 class Simulator
 {
 public:
+
+	static Fractal*		fractal;
+	static float		area_width;	// The width of the area on the screen.
+	static dim::Vector2	position;	// The center of the area on the screen.
+	static bool			image_done;
 
 	/**
 	 * @brief Initialize the simulation.
@@ -31,9 +29,9 @@ public:
 	 */
 	static void reset();
 
-	/**
-	 * @brief Update the simulation.
-	 */
+	static dim::Vector2 screen_to_world(dim::Vector2int position);
+	static dim::Vector2int world_to_screen(dim::Vector2 position);
+
 	static void update();
 
 	/**

@@ -10,9 +10,8 @@ class Menu
 {
 public:
 
-	static bool				visible;			// True if the menu is visible, false otherwise.
-	static bool				active;				// True if you clicked on the menu, false otherwise.
-	static FractalType		fractal_type;		// The type of the fractal.
+	static bool	visible;	// True if the menu is visible, false otherwise.
+	static bool	active;		// True if you clicked on the menu, false otherwise.
 
 	/**
 	 * @brief Handle the events of the menu.
@@ -37,21 +36,6 @@ public:
 	 * @return an array of booleans that are true if the corresponding button was clicked
 	 */
 	static std::vector<bool> centered_buttons(const std::vector<std::string> texts, float buttons_height, float spaces_size);
-
-	/**
-	 * @brief Set the default values of the simulation settings.
-	 */
-	static void set_default_values();
-
-	/**
-	 * @brief Show the Julia settings.
-	 */
-	static void julia();
-
-	/**
-	 * @brief Show the Mandelbrot settings.
-	 */
-	static void mandelbrot();
 
 	/**
 	 * @brief Show the settings.

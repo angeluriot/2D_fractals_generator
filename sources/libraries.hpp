@@ -4,5 +4,6 @@
 #include <dim/dimension3D.hpp>
 #include <fstream>
 #include <vector>
+#include <memory>
 
 #endif

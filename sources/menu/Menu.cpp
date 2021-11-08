@@ -1,9 +1,8 @@
-#include "Menu.hpp"
+#include "menu/Menu.hpp"
 #include "Simulator.hpp"
 
-bool			Menu::visible			= true;
-bool			Menu::active			= false;
-FractalType		Menu::fractal_type		= FractalType::Julia;
+bool	Menu::visible	= true;
+bool	Menu::active	= false;
 
 void Menu::check_events(const sf::Event& sf_event)
 {
@@ -43,21 +42,6 @@ std::vector<bool> Menu::centered_buttons(const std::vector<std::string> texts, f
 	return result;
 }
 
-void Menu::set_default_values()
-{
-	
-}
-
-void Menu::julia()
-{
-	
-}
-
-void Menu::mandelbrot()
-{
-	
-}
-
 void Menu::display()
 {
 	if (visible)
@@ -67,16 +51,32 @@ void Menu::display()
 
 		ImGui::NewLine();
 
-		FractalType temp = fractal_type;
+		Fractal::Type fractal_type = Simulator::fractal->get_type();
 
 		ImGui::Text("The type of fractal");
-		ImGui::Combo("##fractal_type", reinterpret_cast<int*>(&fractal_type), "Julia\0Mandelbrot");
 
-		if (fractal_type != temp)
+		if (ImGui::Combo("##fractal_type", reinterpret_cast<int*>(&fractal_type), "Julia\0Mandelbrot"))
 		{
-			set_default_values();
+			delete Simulator::fractal;
+
+			switch (fractal_type)
+			{
+			case Fractal::Type::Julia:
+				Simulator::fractal = new Julia();
+				break;
+
+			case Fractal::Type::Mandelbrot:
+				Simulator::fractal = new Mandelbrot();
+				break;
+
+			default:
+				break;
+			}
+
 			Simulator::reset();
 		}
+
+		Simulator::fractal->menu();
 
 		active = ImGui::IsWindowFocused();
 
