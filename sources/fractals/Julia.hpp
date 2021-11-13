@@ -7,8 +7,9 @@ class Julia : public Fractal
 {
 public:
 
-	dim::Vector2	c;
-	int				max_iterations;
+	std::array<float, 2>	c;
+	int						max_iterations;
+	int						pallet_index;
 
 	Julia();
 	Julia(const Julia& other) = default;
@@ -16,7 +17,7 @@ public:
 	Type get_type() const override;
 	void menu() override;
 	void reset() override;
-	void render() override;
+	void compute() override;
 };
 
 #endif

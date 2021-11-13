@@ -19,6 +19,8 @@ void Mandelbrot::menu()
 	ImGui::Text("The maximum number of iterations :");
 	changed = ImGui::SliderInt("##max_iteration", &max_iterations, 1, 10000, NULL, ImGuiSliderFlags_Logarithmic) || changed;
 
+	changed = ColorPallet::menu(pallet_index) || changed;
+
 	if (changed)
 		Simulator::image_done = false;
 }
@@ -26,26 +28,38 @@ void Mandelbrot::menu()
 void Mandelbrot::reset()
 {
 	max_iterations = 100;
-
-	Renderer::fractal.send_data("mandelbrot", mesh, dim::DataType::Positions | dim::DataType::TexCoords);
-	glGetError();
+	pallet_index = 0;
 }
 
-void Mandelbrot::render()
+void Mandelbrot::compute()
 {
-	Renderer::frame_buffer.bind();
-		Renderer::frame_buffer.clear();
-		dim::Shader::get("mandelbrot").bind();
-			Renderer::fractal.bind();
+	ComputeShader::choose_function("mandelbrot");
+	ComputeShader::add_argument(image.buffer);
+	ComputeShader::add_argument(max_iterations);
+	ComputeShader::add_argument(Simulator::position[0]);
+	ComputeShader::add_argument(Simulator::position[1]);
+	ComputeShader::add_argument(Simulator::area_width);
 
-				dim::Shader::get("mandelbrot").send_uniform("u_max_iterations", max_iterations);
-				dim::Shader::get("mandelbrot").send_uniform("u_position", Simulator::position);
-				dim::Shader::get("mandelbrot").send_uniform("u_area", dim::Vector2(Simulator::area_width,
-					Simulator::area_width * (static_cast<float>(dim::Window::get_size().y) / static_cast<float>(dim::Window::get_size().x))));
+	double area_height = Simulator::area_width * (static_cast<double>(dim::Window::get_size().y) / static_cast<double>(dim::Window::get_size().x));
 
-				Renderer::fractal.draw();
+	ComputeShader::add_argument(area_height);
 
-			Renderer::fractal.unbind();
-		dim::Shader::get("mandelbrot").unbind();
-	Renderer::frame_buffer.unbind();
+	cl::Buffer pallet = ComputeShader::Buffer(ColorPallet::pallets[pallet_index], Permissions::Read);
+	int size;
+
+	if (pallet_index == ColorPallet::rgb)
+		size = -1;
+
+	else if (pallet_index == ColorPallet::black_or_white)
+		size = -2;
+
+	else
+		size = ColorPallet::pallets[pallet_index].size() - 1;
+
+	ComputeShader::add_argument(pallet);
+	ComputeShader::add_argument(size);
+
+	ComputeShader::launch(cl::NDRange(dim::Window::get_size().x, dim::Window::get_size().y));
+
+	image.update(dim::Window::get_size().x, dim::Window::get_size().y);
 }

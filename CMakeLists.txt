@@ -34,6 +34,10 @@ endif()
 add_subdirectory(libraries)
 target_link_libraries(${PROJECT_NAME} PUBLIC Libraries)
 
+# OpenCL
+find_package(OpenCL REQUIRED)
+target_link_libraries(${PROJECT_NAME} PUBLIC OpenCL::OpenCL)
+
 # Dimension3D
 target_include_directories(${PROJECT_NAME} PUBLIC libraries/Dimension3D/includes)
 

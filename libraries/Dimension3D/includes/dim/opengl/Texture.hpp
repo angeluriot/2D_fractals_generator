@@ -61,7 +61,6 @@ namespace dim
 
 		std::shared_ptr<GLuint>					id;			// The OpenGL id of the texture.
 		mutable std::shared_ptr<unsigned int>	unit;		// The bind order of the texture.
-		std::shared_ptr<Type>					pixel_type;	// The type of the texture pixels.
 
 		static std::map<std::string, Texture>	textures;	// The static textures container.
 		static int								max_unit;	// The current maximum texture bind order - 1
@@ -88,6 +87,13 @@ namespace dim
 		 * @param warpping the way to handle texture coordinates outside of the image
 		 */
 		Texture(const std::string& path, Filtering filtering = Filtering::Linear, Warpping warpping = Warpping::MirroredRepeat);
+
+		/**
+		 * @brief Construct a new texture from an already existing OpenGL texture.
+		 *
+		 * @param id the id of the OpenGL texture
+		 */
+		Texture(GLuint id);
 
 		/**
 		 * @brief Delete the texture.

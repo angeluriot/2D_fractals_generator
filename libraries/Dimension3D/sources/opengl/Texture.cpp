@@ -9,15 +9,19 @@ namespace dim
 	{
 		id = std::make_shared<GLuint>(0);
 		unit = std::make_shared<unsigned int>(-1);
-		pixel_type = std::make_shared<Type>(Type::RGBA);
 	}
 
 	Texture::Texture(const std::string& path, Filtering filtering, Warpping warpping)
 	{
 		id = std::make_shared<GLuint>(0);
 		unit = std::make_shared<unsigned int>(-1);
-		pixel_type = std::make_shared<Type>(Type::RGBA);
 		load(path, filtering, warpping);
+	}
+
+	Texture::Texture(GLuint id)
+	{
+		this->id = std::make_shared<GLuint>(id);
+		unit = std::make_shared<unsigned int>(-1);
 	}
 
 	Texture::~Texture()
@@ -28,8 +32,6 @@ namespace dim
 
 	void Texture::create(unsigned int width, unsigned int height, Filtering filtering, Warpping warpping, Type pixel_type)
 	{
-		*(this->pixel_type) = pixel_type;
-
 		glDeleteTextures(1, &(*id));
 		*unit = -1;
 
@@ -65,7 +67,6 @@ namespace dim
 	{
 		glDeleteTextures(1, &(*id));
 		*unit = -1;
-		*pixel_type = Type::RGBA;
 
 		sf::Image image;
 

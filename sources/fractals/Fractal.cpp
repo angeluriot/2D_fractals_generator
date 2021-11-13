@@ -1,3 +1,3 @@
 #include "Simulator.hpp"
 
-dim::Mesh Fractal::mesh;
+Image Fractal::image;

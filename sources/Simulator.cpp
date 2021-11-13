@@ -1,19 +1,14 @@
 #include "Simulator.hpp"
 
-Fractal*		Simulator::fractal;
-float			Simulator::area_width;
-dim::Vector2	Simulator::position;
-bool			Simulator::image_done;
+Fractal*				Simulator::fractal;
+double					Simulator::area_width;
+std::array<double, 2>	Simulator::position;
+bool					Simulator::image_done;
 
 void Simulator::init()
 {
-	Fractal::mesh = dim::Mesh::screen;
-	Fractal::mesh.texcoords[0] = dim::Vector2( 0.5f,  0.5f);
-	Fractal::mesh.texcoords[1] = dim::Vector2(-0.5f,  0.5f);
-	Fractal::mesh.texcoords[2] = dim::Vector2(-0.5f, -0.5f);
-	Fractal::mesh.texcoords[3] = dim::Vector2( 0.5f, -0.5f);
-	Fractal::mesh.texcoords[4] = dim::Vector2( 0.5f,  0.5f);
-	Fractal::mesh.texcoords[5] = dim::Vector2(-0.5f, -0.5f);
+	ComputeShader::init("shaders/compute/cl_compute_shader.cl");
+	Fractal::image.reset(dim::Window::get_size().x, dim::Window::get_size().y);
 
 	Renderer::init();
 	fractal = new Julia();
@@ -22,25 +17,25 @@ void Simulator::init()
 
 void Simulator::reset()
 {
-	area_width = 4.f;
-	position = dim::Vector2(0.f, 0.f);
+	area_width = 4.;
+	position = { 0., 0. };
 	fractal->reset();
 	image_done = false;
 }
 
-dim::Vector2 Simulator::screen_to_world(dim::Vector2int pos)
+std::array<double, 2> Simulator::screen_to_world(dim::Vector2int pos)
 {
-	float x = ((pos.x / static_cast<float>(dim::Window::get_size().x)) - 0.5f) * area_width + position.x;
-	float y = (0.5f - (pos.y / static_cast<float>(dim::Window::get_size().x))) * area_width + position.y;
+	double x = ((static_cast<double>(pos.x) / static_cast<double>(dim::Window::get_size().x)) - 0.5) * area_width + position[0];
+	double y = (0.5 - (static_cast<double>(pos.y) / static_cast<double>(dim::Window::get_size().x))) * area_width + position[1];
 
-	return dim::Vector2(x, y);
+	return { x, y };
 }
 
-dim::Vector2int Simulator::world_to_screen(dim::Vector2 pos)
+dim::Vector2int Simulator::world_to_screen(std::array<double, 2> pos)
 {
-	float x = (((pos.x - position.x) / area_width) + 0.5f) * static_cast<float>(dim::Window::get_size().x);
-	float y = (1.5f - ((pos.y - position.y) / area_width)) * static_cast<float>(dim::Window::get_size().x);
-	return dim::Vector2(x, y);
+	int x = (((pos[0] - position[0]) / area_width) + 0.5) * dim::Window::get_size().x;
+	int y = (1.5 - ((pos[1] - position[1]) / area_width)) * dim::Window::get_size().x;
+	return dim::Vector2int(x, y);
 }
 
 void Simulator::update()
@@ -52,7 +47,8 @@ void Simulator::update()
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && !Menu::active && mouse_pos.x >= 0 && mouse_pos.x <= dim::Window::get_size().x &&
 		mouse_pos.y >= 0 && mouse_pos.y <= dim::Window::get_size().y)
 	{
-		position -= screen_to_world(mouse_pos) - screen_to_world(prev_mouse_pos);
+		position[0] -= screen_to_world(mouse_pos)[0] - screen_to_world(prev_mouse_pos)[0];
+		position[1] -= screen_to_world(mouse_pos)[1] - screen_to_world(prev_mouse_pos)[1];
 		image_done = false;
 	}
 
@@ -76,14 +72,18 @@ void Simulator::check_events(const sf::Event& sf_event)
 		image_done = false;
 	}
 
-	Renderer::check_events(sf_event);
+	if (sf_event.type == sf::Event::Resized)
+	{
+		Fractal::image.reset(dim::Window::get_size().x, dim::Window::get_size().y);
+		image_done = false;
+	}
 }
 
 void Simulator::draw()
 {
 	if (!image_done)
 	{
-		Simulator::fractal->render();
+		Simulator::fractal->compute();
 		image_done = true;
 	}
 

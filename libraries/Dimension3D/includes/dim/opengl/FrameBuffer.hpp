@@ -8,7 +8,6 @@
 
 namespace dim
 {
-
 	/**
 	 * @brief A class that represents a texture you can draw on. If binded, all the draw calls will affect
 	 * the frame buffer instead of the screen (it needs to be binded before use and unbinded after).
@@ -20,6 +19,7 @@ namespace dim
 		std::shared_ptr<GLuint>						fbo;			// The OpenGL id of the frame buffer.
 		std::shared_ptr<GLuint>						rbo;			// The OpenGL id of the deth buffer.
 		Texture										texture;		// The color texture.
+		std::shared_ptr<Texture::Type>				type;			// The type of the texture's pixels.
 		std::shared_ptr<unsigned int>				width;			// The width of the textures.
 		std::shared_ptr<unsigned int>				height;			// The height of the textures.
 

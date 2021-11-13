@@ -10,7 +10,7 @@ namespace dim
 		rbo = std::make_shared<GLuint>();
 		width = std::make_shared<unsigned int>(Window::initial_size.x);
 		height = std::make_shared<unsigned int>(Window::initial_size.y);
-		texture.pixel_type = std::make_shared<Texture::Type>(Texture::Type::RGB);
+		type = std::make_shared<Texture::Type>(Texture::Type::RGB);
 	}
 
 	FrameBuffer::FrameBuffer(unsigned int width, unsigned int height, Texture::Type texture_type)
@@ -19,7 +19,7 @@ namespace dim
 		rbo = std::make_shared<GLuint>(0);
 		this->width = std::make_shared<unsigned int>(std::max(width, static_cast<unsigned int>(1)));
 		this->height = std::make_shared<unsigned int>(std::max(height, static_cast<unsigned int>(1)));
-		texture.pixel_type = std::make_shared<Texture::Type>(Texture::Type::RGB);
+		type = std::make_shared<Texture::Type>(texture_type);
 
 		create(width, height, texture_type);
 	}
@@ -30,7 +30,7 @@ namespace dim
 		rbo = std::make_shared<GLuint>(0);
 		width = std::make_shared<unsigned int>(std::max(size.x, 1));
 		height = std::make_shared<unsigned int>(std::max(size.y, 1));
-		texture.pixel_type = std::make_shared<Texture::Type>(Texture::Type::RGB);
+		type = std::make_shared<Texture::Type>(texture_type);
 
 		create(size, texture_type);
 	}
@@ -48,7 +48,7 @@ namespace dim
 	{
 		*(this->width) = std::max(width, static_cast<unsigned int>(1));
 		*(this->height) = std::max(height, static_cast<unsigned int>(1));
-		*texture.pixel_type = texture_type;
+		*type = texture_type;
 
 		glDeleteFramebuffers(1, &(*fbo));
 		glDeleteTextures(1, &(*texture.id));
@@ -60,14 +60,14 @@ namespace dim
 			glGenTextures(1, &(*texture.id));
 			glBindTexture(GL_TEXTURE_2D, *texture.id);
 			{
-				if (*texture.pixel_type == Texture::Type::RGB || *texture.pixel_type == Texture::Type::RGBA)
-					glTexImage2D(GL_TEXTURE_2D, 0, static_cast<GLint>(*texture.pixel_type), *(this->width), *(this->height), 0, static_cast<GLint>(*texture.pixel_type), GL_UNSIGNED_BYTE, NULL);
+				if (*type == Texture::Type::RGB || *type == Texture::Type::RGBA)
+					glTexImage2D(GL_TEXTURE_2D, 0, static_cast<GLint>(*type), *(this->width), *(this->height), 0, static_cast<GLint>(*type), GL_UNSIGNED_BYTE, NULL);
 
-				else if (*texture.pixel_type == Texture::Type::RGB_16f || *texture.pixel_type == Texture::Type::RGB_32f)
-					glTexImage2D(GL_TEXTURE_2D, 0, static_cast<GLint>(*texture.pixel_type), *(this->width), *(this->height), 0, GL_RGB, GL_FLOAT, NULL);
+				else if (*type == Texture::Type::RGB_16f || *type == Texture::Type::RGB_32f)
+					glTexImage2D(GL_TEXTURE_2D, 0, static_cast<GLint>(*type), *(this->width), *(this->height), 0, GL_RGB, GL_FLOAT, NULL);
 
 				else
-					glTexImage2D(GL_TEXTURE_2D, 0, static_cast<GLint>(*texture.pixel_type), *(this->width), *(this->height), 0, GL_RGBA, GL_FLOAT, NULL);
+					glTexImage2D(GL_TEXTURE_2D, 0, static_cast<GLint>(*type), *(this->width), *(this->height), 0, GL_RGBA, GL_FLOAT, NULL);
 
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -122,12 +122,12 @@ namespace dim
 
 	void FrameBuffer::set_size(unsigned int width, unsigned int height)
 	{
-		create(width, height, *texture.pixel_type);
+		create(width, height, *type);
 	}
 
 	void FrameBuffer::set_size(const Vector2int& size)
 	{
-		create(size.x, size.y, *texture.pixel_type);
+		create(size.x, size.y, *type);
 	}
 
 	void FrameBuffer::set_width(unsigned int width)

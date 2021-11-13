@@ -2,6 +2,7 @@
 #define FRACTAL_HPP
 
 #include "libraries.hpp"
+#include "compute_shader/Image.hpp"
 
 class Fractal
 {
@@ -17,12 +18,12 @@ public:
 		Universe	= 2		// The big bang.
 	};
 
-	static dim::Mesh mesh;
+	static Image image;
 
 	virtual Type get_type() const = 0;
 	virtual void menu() = 0;
 	virtual void reset() = 0;
-	virtual void render() = 0;
+	virtual void compute() = 0;
 };
 
 #endif

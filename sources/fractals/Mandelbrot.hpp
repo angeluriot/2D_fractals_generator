@@ -8,6 +8,7 @@ class Mandelbrot : public Fractal
 public:
 
 	int max_iterations;
+	int pallet_index;
 
 	Mandelbrot();
 	Mandelbrot(const Mandelbrot& other) = default;
@@ -15,7 +16,7 @@ public:
 	Type get_type() const override;
 	void menu() override;
 	void reset() override;
-	void render() override;
+	void compute() override;
 };
 
 #endif
