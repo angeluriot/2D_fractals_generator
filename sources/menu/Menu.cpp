@@ -53,7 +53,7 @@ void Menu::display()
 
 		Fractal::Type fractal_type = Simulator::fractal->get_type();
 
-		ImGui::Text("The type of fractal");
+		ImGui::Text("The type of fractal:");
 
 		if (ImGui::Combo("##fractal_type", reinterpret_cast<int*>(&fractal_type), "Julia\0Mandelbrot"))
 		{
@@ -78,8 +78,25 @@ void Menu::display()
 
 		Simulator::fractal->menu();
 
+		ImGui::NewLine();
+		ImGui::Separator();
+		ImGui::NewLine();
+
+		ImGui::Text("Position:");
+		ImGui::NewLine();
+		ImGui::Text(("Real: " + to_string(Simulator::position[0])).data());
+		ImGui::Text(("Imaginary: " + to_string(Simulator::position[1]) + "i").data());
+
 		active = ImGui::IsWindowFocused();
 
 		ImGui::End();
 	}
+}
+
+std::string to_string(const double& value)
+{
+	std::ostringstream out;
+	out.precision(15);
+	out << std::fixed << value;
+	return out.str();
 }

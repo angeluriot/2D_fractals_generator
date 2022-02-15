@@ -25,16 +25,18 @@ void Simulator::reset()
 
 std::array<double, 2> Simulator::screen_to_world(dim::Vector2int pos)
 {
+	double area_height = area_width * (static_cast<double>(dim::Window::get_size().y) / static_cast<double>(dim::Window::get_size().x));
 	double x = ((static_cast<double>(pos.x) / static_cast<double>(dim::Window::get_size().x)) - 0.5) * area_width + position[0];
-	double y = (0.5 - (static_cast<double>(pos.y) / static_cast<double>(dim::Window::get_size().x))) * area_width + position[1];
+	double y = ((static_cast<double>(dim::Window::get_size().y - pos.y) / static_cast<double>(dim::Window::get_size().y)) - 0.5) * area_height + position[1];
 
 	return { x, y };
 }
 
 dim::Vector2int Simulator::world_to_screen(std::array<double, 2> pos)
 {
+	double area_height = area_width * (static_cast<double>(dim::Window::get_size().y) / static_cast<double>(dim::Window::get_size().x));
 	int x = (((pos[0] - position[0]) / area_width) + 0.5) * dim::Window::get_size().x;
-	int y = (1.5 - ((pos[1] - position[1]) / area_width)) * dim::Window::get_size().x;
+	int y = dim::Window::get_size().y - ((((pos[1] - position[1]) / area_height) + 0.5) * dim::Window::get_size().y);
 	return dim::Vector2int(x, y);
 }
 
@@ -66,8 +68,15 @@ void Simulator::check_events(const sf::Event& sf_event)
 		else
 			zoom = 1.05f;
 
+		std::array<double, 2> prev_mouse_pos = screen_to_world(sf::Mouse::getPosition(dim::Window::get_window()));
+
 		for (int i = 0; i < std::abs(sf_event.mouseWheel.delta); i++)
 			area_width *= zoom;
+
+		std::array<double, 2> mouse_pos = screen_to_world(sf::Mouse::getPosition(dim::Window::get_window()));
+
+		position[0] -= mouse_pos[0] - prev_mouse_pos[0];
+		position[1] -= mouse_pos[1] - prev_mouse_pos[1];
 
 		image_done = false;
 	}
@@ -76,6 +85,11 @@ void Simulator::check_events(const sf::Event& sf_event)
 	{
 		Fractal::image.reset(dim::Window::get_size().x, dim::Window::get_size().y);
 		image_done = false;
+	}
+
+	if (sf_event.type == sf::Event::KeyPressed && sf_event.key.code == sf::Keyboard::F2)
+	{
+		Fractal::image.save("screens/test.png");
 	}
 }
 

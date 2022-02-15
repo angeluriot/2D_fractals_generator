@@ -7,8 +7,9 @@ class Mandelbrot : public Fractal
 {
 public:
 
-	int max_iterations;
-	int pallet_index;
+	int		max_iterations;
+	int		pallet_index;
+	bool	smooth;
 
 	Mandelbrot();
 	Mandelbrot(const Mandelbrot& other) = default;

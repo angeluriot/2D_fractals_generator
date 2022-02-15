@@ -43,4 +43,6 @@ public:
 	static void display();
 };
 
+std::string to_string(const double& value);
+
 #endif

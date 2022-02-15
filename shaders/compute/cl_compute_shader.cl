@@ -30,9 +30,19 @@ typedef float16 real16_t;
 
 #endif
 
-float4 get_color(int iterations, int max_iterations, float4* pallet, int colors_nb)
+float modulo(float a, float b)
 {
-	float value = (float)iterations / (float)max_iterations;
+	return a - b * floor(a / b);
+}
+
+real_t modulus_2(real2_t x)
+{
+	return x.x * x.x + x.y * x.y;
+}
+
+float4 get_color(float iterations, float max_iterations, float4* pallet, int colors_nb)
+{
+	float value = iterations / max_iterations;
 	float4 color = (float4)(1.f, 1.f, 1.f, 1.f);
 
 	float min_value;
@@ -54,7 +64,7 @@ float4 get_color(int iterations, int max_iterations, float4* pallet, int colors_
 }
 
 __kernel void julia(__global float4* pixels, float c_r, float c_i, int max_iterations, real_t position_x, real_t position_y,
-	real_t width, real_t height, __global float4* pallet, int colors_nb)
+	real_t width, real_t height, __global float4* pallet, int colors_nb, int smooth)
 {
 	real2_t number = (real2_t)(0.f, 0.f);
 	real2_t c = (real2_t)(c_r, c_i);
@@ -64,13 +74,22 @@ __kernel void julia(__global float4* pixels, float c_r, float c_i, int max_itera
 
 	number.x = ((real_t)get_global_id(0) / (real_t)get_global_size(0)) * width + position_x - width / 2.;
 	number.y = ((real_t)get_global_id(1) / (real_t)get_global_size(1)) * height + position_y - height / 2.;
+	real_t smooth_value = exp(-length(number));
 
-	while (length(number) < 2 && i < max_iterations)
+	float max_modulus;
+
+	if (smooth == 1)
+		max_modulus = 1000.f;
+	else
+		max_modulus = 4.f;
+
+	while (modulus_2(number) < max_modulus && i < max_iterations)
 	{
 		temp = number;
 		number.x = temp.x * temp.x - temp.y * temp.y + c.x;
 		number.y = 2.f * temp.x * temp.y + c.y;
 		i++;
+		smooth_value += exp(-length(number));
 	}
 
 	if (i == max_iterations)
@@ -79,6 +98,8 @@ __kernel void julia(__global float4* pixels, float c_r, float c_i, int max_itera
 		color = get_color(i % 6, 6, pallet, 6);
 	else if (colors_nb == -2)
 		color = get_color(i % 2, 2, pallet, 2);
+	else if (smooth == 1)
+		color = get_color(modulo((float)smooth_value, (float)max_iterations / 10.f), (float)max_iterations / 10.f, pallet, colors_nb);
 	else
 		color = get_color(i % (max_iterations / 10), max_iterations / 10, pallet, colors_nb);
 
@@ -86,7 +107,7 @@ __kernel void julia(__global float4* pixels, float c_r, float c_i, int max_itera
 }
 
 __kernel void mandelbrot(__global float4* pixels, int max_iterations, real_t position_x, real_t position_y,
-	real_t width, real_t height, __global float4* pallet, int colors_nb)
+	real_t width, real_t height, __global float4* pallet, int colors_nb, int smooth)
 {
 	real2_t number = (real2_t)(0.f, 0.f);
 	real2_t c = (real2_t)(0.f, 0.f);
@@ -97,7 +118,14 @@ __kernel void mandelbrot(__global float4* pixels, int max_iterations, real_t pos
 	c.x = ((real_t)get_global_id(0) / (real_t)get_global_size(0)) * width + position_x - width / 2.;
 	c.y = ((real_t)get_global_id(1) / (real_t)get_global_size(1)) * height + position_y - height / 2.;
 
-	while (length(number) < 2 && i < max_iterations)
+	float max_modulus;
+
+	if (smooth == 1)
+		max_modulus = 1000.f;
+	else
+		max_modulus = 4.f;
+
+	while (modulus_2(number) < max_modulus && i < max_iterations)
 	{
 		temp = number;
 		number.x = temp.x * temp.x - temp.y * temp.y + c.x;
@@ -105,12 +133,16 @@ __kernel void mandelbrot(__global float4* pixels, int max_iterations, real_t pos
 		i++;
 	}
 
+	float smooth_value = (float)i + 1. - log(log(length(number))) / log(2.);
+
 	if (i == max_iterations)
 		color = (float4)(0.f, 0.f, 0.f, 1.f);
 	else if (colors_nb == -1)
 		color = get_color(i % 6, 6, pallet, 6);
 	else if (colors_nb == -2)
 		color = get_color(i % 2, 2, pallet, 2);
+	else if (smooth == 1)
+		color = get_color(modulo(smooth_value, (float)max_iterations / 10.f), (float)max_iterations / 10.f, pallet, colors_nb);
 	else
 		color = get_color(i % (max_iterations / 10), max_iterations / 10, pallet, colors_nb);
 

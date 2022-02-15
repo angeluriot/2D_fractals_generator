@@ -16,6 +16,7 @@ public:
 
 	void reset(unsigned int width, unsigned int height);
 	void update(unsigned int width, unsigned int height);
+	void save(const std::string& filename);
 };
 
 #endif

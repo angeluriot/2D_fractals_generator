@@ -16,10 +16,16 @@ void Mandelbrot::menu()
 
 	ImGui::NewLine();
 
-	ImGui::Text("The maximum number of iterations :");
+	ImGui::Text("The max iterations number:");
 	changed = ImGui::SliderInt("##max_iteration", &max_iterations, 1, 10000, NULL, ImGuiSliderFlags_Logarithmic) || changed;
 
 	changed = ColorPallet::menu(pallet_index) || changed;
+
+	ImGui::NewLine();
+
+	ImGui::Text("Smooth:");
+	ImGui::SameLine();
+	changed = ImGui::Checkbox("##smooth", &smooth) || changed;
 
 	if (changed)
 		Simulator::image_done = false;
@@ -29,6 +35,7 @@ void Mandelbrot::reset()
 {
 	max_iterations = 100;
 	pallet_index = 0;
+	smooth = true;
 }
 
 void Mandelbrot::compute()
@@ -54,10 +61,13 @@ void Mandelbrot::compute()
 		size = -2;
 
 	else
-		size = ColorPallet::pallets[pallet_index].size() - 1;
+		size = static_cast<int>(ColorPallet::pallets[pallet_index].size()) - 1;
 
 	ComputeShader::add_argument(pallet);
 	ComputeShader::add_argument(size);
+
+	int smooth_int = (size > 0 ? smooth : 1);
+	ComputeShader::add_argument(smooth_int);
 
 	ComputeShader::launch(cl::NDRange(dim::Window::get_size().x, dim::Window::get_size().y));
 

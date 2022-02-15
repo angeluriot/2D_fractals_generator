@@ -3,8 +3,8 @@
 void Image::reset(unsigned int width, unsigned int height)
 {
 	data.clear();
-	data.resize(width * height, dim::Vector4(0.f, 1.f, 0.f, 1.f));
-	buffer = ComputeShader::Buffer(data, Permissions::All);
+	data.resize(width * height);
+	buffer = ComputeShader::Buffer(data, Permissions::Write);
 
 	GLuint id;
 	glGenTextures(1, &id);
@@ -29,4 +29,17 @@ void Image::update(unsigned int width, unsigned int height)
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_FLOAT, (GLvoid*)data.data());
 		glGenerateMipmap(GL_TEXTURE_2D);
 	texture.unbind();
+}
+
+void Image::save(const std::string& filename)
+{
+	static int nb = 1;
+	sf::Image sf_image;
+	sf_image.create(dim::Window::get_size().x, dim::Window::get_size().y);
+
+	for (int i = 0; i < dim::Window::get_size().x; i++)
+		for (int j = 0; j < dim::Window::get_size().y; j++)
+			sf_image.setPixel(i, j, data[j * dim::Window::get_size().x + i].to_sf());
+
+	sf_image.saveToFile(filename + "_" + std::to_string(nb++));
 }

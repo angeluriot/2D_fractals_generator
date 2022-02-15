@@ -10,6 +10,7 @@ public:
 	std::array<float, 2>	c;
 	int						max_iterations;
 	int						pallet_index;
+	bool					smooth;
 
 	Julia();
 	Julia(const Julia& other) = default;
