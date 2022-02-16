@@ -55,7 +55,7 @@ void Julia::compute()
 	ComputeShader::add_argument(Simulator::position[1]);
 	ComputeShader::add_argument(Simulator::area_width);
 
-	double area_height = Simulator::area_width * (static_cast<double>(dim::Window::get_size().y) / static_cast<double>(dim::Window::get_size().x));
+	double area_height = Simulator::area_width * ((double)dim::Window::get_size().y / (double)dim::Window::get_size().x);
 
 	ComputeShader::add_argument(area_height);
 
@@ -69,7 +69,7 @@ void Julia::compute()
 		size = -2;
 
 	else
-		size = static_cast<int>(ColorPallet::pallets[pallet_index].size()) - 1;
+		size = (int)ColorPallet::pallets[pallet_index].size() - 1;
 
 	ComputeShader::add_argument(pallet);
 	ComputeShader::add_argument(size);

@@ -148,3 +148,48 @@ __kernel void mandelbrot(__global float4* pixels, int max_iterations, real_t pos
 
 	pixels[get_global_id(1) * get_global_size(0) + get_global_id(0)] = color;
 }
+
+__kernel void burning_ship(__global float4* pixels, int max_iterations, real_t position_x, real_t position_y,
+	real_t width, real_t height, __global float4* pallet, int colors_nb, int smooth)
+{
+	real2_t number = (real2_t)(0.f, 0.f);
+	real2_t c = (real2_t)(0.f, 0.f);
+	real2_t temp = (real2_t)(0.f, 0.f);
+	int i = 0;
+	float4 color = (float4)(0.f, 0.f, 0.f, 0.f);
+
+	c.x = ((real_t)get_global_id(0) / (real_t)get_global_size(0)) * width + position_x - width / 2.;
+	c.y = ((real_t)(get_global_size(1) - 1 - get_global_id(1)) / (real_t)get_global_size(1)) * height + position_y - height / 2.;
+
+	float max_modulus;
+
+	if (smooth == 1)
+		max_modulus = 1000.f;
+	else
+		max_modulus = 4.f;
+
+	while (modulus_2(number) < max_modulus && i < max_iterations)
+	{
+		number.x = fabs(number.x);
+		number.y = fabs(number.y);
+		temp = number;
+		number.x = temp.x * temp.x - temp.y * temp.y + c.x;
+		number.y = 2.f * temp.x * temp.y + c.y;
+		i++;
+	}
+
+	float smooth_value = (float)i + 1. - log(log(length(number))) / log(2.);
+
+	if (i == max_iterations)
+		color = (float4)(0.f, 0.f, 0.f, 1.f);
+	else if (colors_nb == -1)
+		color = get_color(i % 6, 6, pallet, 6);
+	else if (colors_nb == -2)
+		color = get_color(i % 2, 2, pallet, 2);
+	else if (smooth == 1)
+		color = get_color(modulo(smooth_value, (float)max_iterations / 10.f), (float)max_iterations / 10.f, pallet, colors_nb);
+	else
+		color = get_color(i % (max_iterations / 10), max_iterations / 10, pallet, colors_nb);
+
+	pixels[get_global_id(1) * get_global_size(0) + get_global_id(0)] = color;
+}

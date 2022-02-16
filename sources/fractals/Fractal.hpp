@@ -13,9 +13,9 @@ public:
 	 */
 	enum class Type : int
 	{
-		Julia		= 0,	// A unique galaxy.
-		Mandelbrot	= 1,	// Two galaxies colliding.
-		Universe	= 2		// The big bang.
+		Julia		= 0,
+		Mandelbrot	= 1,
+		BurningShip	= 2
 	};
 
 	static Image image;

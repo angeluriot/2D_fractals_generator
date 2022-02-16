@@ -1,16 +1,16 @@
 #include "Simulator.hpp"
 
-Mandelbrot::Mandelbrot()
+BurningShip::BurningShip()
 {
 	reset();
 }
 
-Fractal::Type Mandelbrot::get_type() const
+Fractal::Type BurningShip::get_type() const
 {
-	return Type::Mandelbrot;
+	return Type::BurningShip;
 }
 
-void Mandelbrot::menu()
+void BurningShip::menu()
 {
 	bool changed = false;
 
@@ -31,16 +31,16 @@ void Mandelbrot::menu()
 		Simulator::image_done = false;
 }
 
-void Mandelbrot::reset()
+void BurningShip::reset()
 {
 	max_iterations = 100;
 	pallet_index = 0;
 	smooth = true;
 }
 
-void Mandelbrot::compute()
+void BurningShip::compute()
 {
-	ComputeShader::choose_function("mandelbrot");
+	ComputeShader::choose_function("burning_ship");
 	ComputeShader::add_argument(image.buffer);
 	ComputeShader::add_argument(max_iterations);
 	ComputeShader::add_argument(Simulator::position[0]);

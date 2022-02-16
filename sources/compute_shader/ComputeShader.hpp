@@ -53,7 +53,7 @@ public:
 	template <typename T>
 	static cl::Buffer Buffer(std::vector<T>& data, Permissions permissions = Permissions::All)
 	{
-		return cl::Buffer(context, static_cast<cl_mem_flags>(permissions), data.size() * sizeof(T), data.data());
+		return cl::Buffer(context, (cl_mem_flags)permissions, data.size() * sizeof(T), data.data());
 	}
 
 	/**
@@ -67,7 +67,7 @@ public:
 	template <typename T>
 	static cl::Buffer Buffer(T& data, Permissions permissions = Permissions::All)
 	{
-		return cl::Buffer(context, static_cast<cl_mem_flags>(permissions), sizeof(T), &data);
+		return cl::Buffer(context, (cl_mem_flags)permissions, sizeof(T), &data);
 	}
 
 	/**
