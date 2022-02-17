@@ -42,6 +42,7 @@ void Julia::reset()
 	max_iterations = 100;
 	pallet_index = 0;
 	smooth = true;
+	image.reset(dim::Window::get_size().x, dim::Window::get_size().y);
 }
 
 void Julia::compute()

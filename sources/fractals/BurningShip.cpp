@@ -34,8 +34,9 @@ void BurningShip::menu()
 void BurningShip::reset()
 {
 	max_iterations = 100;
-	pallet_index = 0;
+	pallet_index = 1;
 	smooth = true;
+	image.reset(dim::Window::get_size().x, dim::Window::get_size().y);
 }
 
 void BurningShip::compute()

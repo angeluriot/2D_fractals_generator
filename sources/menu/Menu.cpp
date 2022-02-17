@@ -55,7 +55,7 @@ void Menu::display()
 
 		ImGui::Text("The type of fractal:");
 
-		if (ImGui::Combo("##fractal_type", reinterpret_cast<int*>(&fractal_type), "Julia\0Mandelbrot\0Burning Ship"))
+		if (ImGui::Combo("##fractal_type", reinterpret_cast<int*>(&fractal_type), "Julia\0Mandelbrot\0Burning Ship\0Buddhabrot"))
 		{
 			delete Simulator::fractal;
 
@@ -71,6 +71,10 @@ void Menu::display()
 
 			case Fractal::Type::BurningShip:
 				Simulator::fractal = new BurningShip();
+				break;
+
+			case Fractal::Type::Buddhabrot:
+				Simulator::fractal = new Buddhabrot();
 				break;
 
 			default:

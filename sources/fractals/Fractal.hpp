@@ -15,7 +15,8 @@ public:
 	{
 		Julia		= 0,
 		Mandelbrot	= 1,
-		BurningShip	= 2
+		BurningShip	= 2,
+		Buddhabrot	= 3
 	};
 
 	static Image image;

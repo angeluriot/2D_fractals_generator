@@ -7,6 +7,7 @@
 #include "fractals/Julia.hpp"
 #include "fractals/Mandelbrot.hpp"
 #include "fractals/BurningShip.hpp"
+#include "fractals/Buddhabrot.hpp"
 #include "compute_shader/ComputeShader.hpp"
 #include "compute_shader/Image.hpp"
 #include "renderer/ColorPallet.hpp"

@@ -21,6 +21,16 @@ void Image::reset(unsigned int width, unsigned int height)
 	texture = dim::Texture(id);
 }
 
+void Image::fill(const dim::Color& color)
+{
+	ComputeShader::get_data(buffer, data);
+
+	for (auto& d : data)
+		d = color;
+
+	buffer = ComputeShader::Buffer(data, Permissions::Write);
+}
+
 void Image::update(unsigned int width, unsigned int height)
 {
 	ComputeShader::get_data(buffer, data);
