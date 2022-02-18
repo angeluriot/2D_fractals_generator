@@ -194,21 +194,21 @@ __kernel void burning_ship(__global float4* pixels, int max_iterations, real_t p
 	pixels[get_global_id(1) * get_global_size(0) + get_global_id(0)] = color;
 }
 
-void set_pixel(float4* pixels, int2 pos, int2 screen_size, int i, int max_iterations)
+void set_pixel(float4* pixels, int2 pos, int2 screen_size, int color_id, int max_iterations)
 {
-	if (pos.x >= 0 && pos.x < screen_size.x && pos.y >= 0 && pos.y < screen_size.y && i > 1)
+	if (pos.x >= 0 && pos.x < screen_size.x && pos.y >= 0 && pos.y < screen_size.y)
 	{
-		if (i < max_iterations / 25)
-			pixels[pos.y * screen_size.x + pos.x].x += 1.f / ((float)(max_iterations) / 10.f);
-		else if (i < max_iterations / 5)
-			pixels[pos.y * screen_size.x + pos.x].y += 1.f / ((float)(max_iterations) / 10.f);
+		if (color_id == 0)
+			pixels[pos.y * screen_size.x + pos.x].x += 1.f / (float)(max_iterations);
+		else if (color_id == 1)
+			pixels[pos.y * screen_size.x + pos.x].y += (1.f / (float)(max_iterations)) / 4.f;
 		else
-			pixels[pos.y * screen_size.x + pos.x].z += 1.f / ((float)(max_iterations) / 10.f);
+			pixels[pos.y * screen_size.x + pos.x].z += (1.f / (float)(max_iterations)) / 16.f;
 	}
 }
 
 __kernel void buddhabrot(__global float4* pixels, __global real2_t* points, int max_iterations,
-	real_t position_x, real_t position_y, real_t width, real_t height, int2 screen_size)
+	real_t position_x, real_t position_y, real_t width, real_t height, int color_id, int2 screen_size)
 {
 	real2_t number = (real2_t)(0.f, 0.f);
 	real2_t c = points[get_global_id(0)];
@@ -223,12 +223,32 @@ __kernel void buddhabrot(__global float4* pixels, __global real2_t* points, int 
 		number.x = temp.x * temp.x - temp.y * temp.y + c.x;
 		number.y = 2.f * temp.x * temp.y + c.y;
 		i++;
+	}
 
-		pos.x = (int)(((number.x + width / 2. - position_x) / width) * (real_t)screen_size.x);
-		pos.y = screen_size.y - 1 - (int)(((number.y + height / 2. - position_y) / height) * (real_t)screen_size.y);
-		set_pixel(pixels, pos, screen_size, i, max_iterations);
+	number = (real2_t)(0.f, 0.f);
+	c = points[get_global_id(0)];
+	temp = (real2_t)(0.f, 0.f);
 
-		pos.y = screen_size.y - 1 - (int)(((-number.y + height / 2. - position_y) / height) * (real_t)screen_size.y);
-		set_pixel(pixels, pos, screen_size, i, max_iterations);
+	if (i < max_iterations - 3)
+	{
+		i = 0;
+
+		while (modulus_2(number) < 4.f && i < max_iterations)
+		{
+			temp = number;
+			number.x = temp.x * temp.x - temp.y * temp.y + c.x;
+			number.y = 2.f * temp.x * temp.y + c.y;
+			i++;
+
+			if (i > 3)
+			{
+				pos.x = (int)(((number.x + width / 2. - position_x) / width) * (real_t)screen_size.x);
+				pos.y = screen_size.y - 1 - (int)(((number.y + height / 2. - position_y) / height) * (real_t)screen_size.y);
+				set_pixel(pixels, pos, screen_size, color_id, max_iterations);
+
+				pos.y = screen_size.y - 1 - (int)(((-number.y + height / 2. - position_y) / height) * (real_t)screen_size.y);
+				set_pixel(pixels, pos, screen_size, color_id, max_iterations);
+			}
+		}
 	}
 }
