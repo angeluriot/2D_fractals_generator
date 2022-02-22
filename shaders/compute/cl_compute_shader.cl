@@ -35,10 +35,83 @@ float modulo(float a, float b)
 	return a - b * floor(a / b);
 }
 
-real_t modulus_2(real2_t x)
+real_t modulus_2(real2_t z)
 {
-	return x.x * x.x + x.y * x.y;
+	return z.x * z.x + z.y * z.y;
 }
+
+real_t modulus(real2_t z)
+{
+	return sqrt(z.x * z.x + z.y * z.y);
+}
+
+real_t argument_from_modulus(real2_t z, real_t mod)
+{
+	if (mod == 0.)
+		return 0.;
+
+	if (z.y >= 0.f)
+		return acos(z.x / mod);
+
+	else
+		return 2. * PI - acos(z.x / mod);
+}
+
+real_t argument(real2_t z)
+{
+	return argument_from_modulus(z, modulus(z));
+}
+
+real2_t add(real2_t z_1, real2_t z_2)
+{
+	return (real2_t)(z_1.x + z_2.x, z_1.y + z_2.y);
+}
+
+real2_t add_3(real2_t z_1, real2_t z_2, real2_t z_3)
+{
+	return add(add(z_1, z_2), z_3);
+}
+
+real2_t subtract(real2_t z_1, real2_t z_2)
+{
+	return (real2_t)(z_1.x - z_2.x, z_1.y - z_2.y);
+}
+
+real2_t multiply(real2_t z_1, real2_t z_2)
+{
+	return (real2_t)(z_1.x * z_2.x - z_1.y * z_2.y, z_1.x * z_2.y + z_1.y * z_2.x);
+}
+
+real2_t real_multiply(real2_t z, real_t n)
+{
+	return (real2_t)(z.x * n, z.y * n);
+}
+
+real2_t multiply_3(real2_t z_1, real2_t z_2, real2_t z_3)
+{
+	return multiply(multiply(z_1, z_2), z_3);
+}
+
+real2_t divide(real2_t z_1, real2_t z_2)
+{
+	real_t mod_2 = modulus_2(z_2);
+
+	if (mod_2 == 0.)
+		return (real2_t)(0., 0.);
+
+	return (real2_t)((z_1.x * z_2.x + z_1.y * z_2.y) / mod_2, (z_1.y * z_2.x - z_1.x * z_2.y) / mod_2);
+}
+
+real2_t real_divide(real2_t z, real_t n)
+{
+	return (real2_t)(z.x / n, z.y / n);
+}
+
+real2_t square(real2_t z)
+{
+	return multiply(z, z);
+}
+
 
 float4 get_color(float iterations, float max_iterations, float4* pallet, int colors_nb)
 {
@@ -109,11 +182,13 @@ __kernel void julia(__global float4* pixels, float c_r, float c_i, int max_itera
 __kernel void mandelbrot(__global float4* pixels, int max_iterations, real_t position_x, real_t position_y,
 	real_t width, real_t height, __global float4* pallet, int colors_nb, int smooth)
 {
-	real2_t number = (real2_t)(0.f, 0.f);
-	real2_t c = (real2_t)(0.f, 0.f);
-	real2_t temp = (real2_t)(0.f, 0.f);
+	real2_t number = (real2_t)(0., 0.);
+	real2_t c = (real2_t)(0., 0.);
+	real2_t temp = (real2_t)(0., 0.);
 	int i = 0;
 	float4 color = (float4)(0.f, 0.f, 0.f, 0.f);
+	real_t mod = (real_t)(0.);
+	real_t arg = (real_t)(0.);
 
 	c.x = ((real_t)get_global_id(0) / (real_t)get_global_size(0)) * width + position_x - width / 2.;
 	c.y = ((real_t)(get_global_size(1) - 1 - get_global_id(1)) / (real_t)get_global_size(1)) * height + position_y - height / 2.;
@@ -194,21 +269,21 @@ __kernel void burning_ship(__global float4* pixels, int max_iterations, real_t p
 	pixels[get_global_id(1) * get_global_size(0) + get_global_id(0)] = color;
 }
 
-void set_pixel(float4* pixels, int2 pos, int2 screen_size, int color_id, int max_iterations)
+void set_pixel(float4* pixels, int2 pos, int2 screen_size, int color_id, int max_iterations, float brightness)
 {
 	if (pos.x >= 0 && pos.x < screen_size.x && pos.y >= 0 && pos.y < screen_size.y)
 	{
 		if (color_id == 0)
-			pixels[pos.y * screen_size.x + pos.x].x += 1.f / (float)(max_iterations);
+			pixels[pos.y * screen_size.x + pos.x].x += brightness / (float)(max_iterations);
 		else if (color_id == 1)
-			pixels[pos.y * screen_size.x + pos.x].y += (1.f / (float)(max_iterations)) / 4.f;
+			pixels[pos.y * screen_size.x + pos.x].y += (brightness / (float)(max_iterations)) / 4.f;
 		else
-			pixels[pos.y * screen_size.x + pos.x].z += (1.f / (float)(max_iterations)) / 16.f;
+			pixels[pos.y * screen_size.x + pos.x].z += (brightness / (float)(max_iterations)) / 16.f;
 	}
 }
 
-__kernel void buddhabrot(__global float4* pixels, __global real2_t* points, int max_iterations,
-	real_t position_x, real_t position_y, real_t width, real_t height, int color_id, int2 screen_size)
+__kernel void buddhabrot(__global float4* pixels, __global real2_t* points, int max_iterations, real_t position_x,
+	real_t position_y, real_t width, real_t height, int color_id, int2 screen_size, float brightness)
 {
 	real2_t number = (real2_t)(0.f, 0.f);
 	real2_t c = points[get_global_id(0)];
@@ -244,11 +319,116 @@ __kernel void buddhabrot(__global float4* pixels, __global real2_t* points, int 
 			{
 				pos.x = (int)(((number.x + width / 2. - position_x) / width) * (real_t)screen_size.x);
 				pos.y = screen_size.y - 1 - (int)(((number.y + height / 2. - position_y) / height) * (real_t)screen_size.y);
-				set_pixel(pixels, pos, screen_size, color_id, max_iterations);
+				set_pixel(pixels, pos, screen_size, color_id, max_iterations, brightness);
 
 				pos.y = screen_size.y - 1 - (int)(((-number.y + height / 2. - position_y) / height) * (real_t)screen_size.y);
-				set_pixel(pixels, pos, screen_size, color_id, max_iterations);
+				set_pixel(pixels, pos, screen_size, color_id, max_iterations, brightness);
 			}
 		}
 	}
+}
+
+__kernel void newton_1(__global float4* pixels, int max_iterations, real_t position_x, real_t position_y,
+	real_t width, real_t height, float2 point_1, float2 point_2, float2 point_3, int smooth)
+{
+	real2_t x = (real2_t)(0., 0.);
+	real2_t p_1 = (real2_t)(point_1.x, point_1.y);
+	real2_t p_2 = (real2_t)(point_2.x, point_2.y);
+	real2_t p_3 = (real2_t)(point_3.x, point_3.y);
+	real2_t num = (real2_t)(0., 0.);
+	real2_t denom = (real2_t)(0., 0.);
+	real_t d_1 = (real_t)(length(p_1));
+	real_t d_2 = (real_t)(length(p_2));
+	real_t d_3 = (real_t)(length(p_3));
+	real_t d_min = (real_t)(min(min(d_1, d_2), d_3));
+	real_t threshold = 0.001;
+	int i = 0;
+	float4 color = (float4)(0.f, 0.f, 0.f, 0.f);
+
+	x.x = ((real_t)get_global_id(0) / (real_t)get_global_size(0)) * width + position_x - width / 2.;
+	x.y = ((real_t)(get_global_size(1) - 1 - get_global_id(1)) / (real_t)get_global_size(1)) * height + position_y - height / 2.;
+
+	while (d_min > threshold && i < max_iterations)
+	{
+		num = multiply_3(subtract(x, p_1), subtract(x, p_2), subtract(x, p_3));
+		denom = add_3(multiply(subtract(x, p_2), subtract(x, p_3)), multiply(subtract(x, p_1), subtract(x, p_3)), multiply(subtract(x, p_1), subtract(x, p_2)));
+		x = subtract(x, divide(num, denom));
+		d_1 = length(subtract(x, p_1));
+		d_2 = length(subtract(x, p_2));
+		d_3 = length(subtract(x, p_3));
+		d_min = min(min(d_1, d_2), d_3);
+		i++;
+	}
+
+	float color_value;
+
+	if (smooth == 1)
+		color_value = 0.6 + 0.4 * cos(0.25 * ((float)i - log2(log(d_min) / log(threshold))));
+	else
+		color_value = 0.6 + 0.4 * cos(0.25 * (float)i);
+
+	if (i == max_iterations)
+		color = (float4)(0.f, 0.f, 0.f, 1.f);
+	else if (d_1 < d_2 && d_1 < d_3)
+		color = (float4)(1.f * color_value, 0.f, 0.3f * color_value, 1.f);
+	else if (d_2 < d_1 && d_2 < d_3)
+		color = (float4)(0.f, 1.f * color_value, 0.3f * color_value, 1.f);
+	else
+		color = (float4)(0.f, 0.3f * color_value, 1.f * color_value, 1.f);
+
+	pixels[get_global_id(1) * get_global_size(0) + get_global_id(0)] = color;
+}
+
+__kernel void newton_2(__global float4* pixels, int max_iterations, real_t position_x, real_t position_y,
+	real_t width, real_t height, int smooth)
+{
+	real2_t x = (real2_t)(0., 0.);
+	real2_t p_1 = (real2_t)(-1., 0.);
+	real2_t p_2 = (real2_t)(1., 0.);
+	real2_t p_3 = (real2_t)(0., 0.);
+	real2_t num = (real2_t)(0., 0.);
+	real2_t denom = (real2_t)(0., 0.);
+	real_t threshold = 0.001;
+	int i = 0;
+	float4 color = (float4)(0.f, 0.f, 0.f, 0.f);
+
+	p_3.x = ((real_t)get_global_id(0) / (real_t)get_global_size(0)) * width + position_x - width / 2.;
+	p_3.y = ((real_t)(get_global_size(1) - 1 - get_global_id(1)) / (real_t)get_global_size(1)) * height + position_y - height / 2.;
+
+	real_t d_1 = (real_t)(length(p_1));
+	real_t d_2 = (real_t)(length(p_2));
+	real_t d_3 = (real_t)(length(p_3));
+	real_t d_min = (real_t)(min(min(d_1, d_2), d_3));
+
+	x = real_divide(add(add(p_1, p_2), p_3), 3.);
+
+	while (d_min > threshold && i < max_iterations)
+	{
+		num = multiply_3(subtract(x, p_1), subtract(x, p_2), subtract(x, p_3));
+		denom = add_3(multiply(subtract(x, p_2), subtract(x, p_3)), multiply(subtract(x, p_1), subtract(x, p_3)), multiply(subtract(x, p_1), subtract(x, p_2)));
+		x = subtract(x, divide(num, denom));
+		d_1 = length(subtract(x, p_1));
+		d_2 = length(subtract(x, p_2));
+		d_3 = length(subtract(x, p_3));
+		d_min = min(min(d_1, d_2), d_3);
+		i++;
+	}
+
+	float color_value;
+
+	if (smooth == 1)
+		color_value = 0.6 + 0.4 * cos(0.25 * ((float)i - log2(log(d_min) / log(threshold))));
+	else
+		color_value = 0.6 + 0.4 * cos(0.25 * (float)i);
+
+	if (i == max_iterations)
+		color = (float4)(0.f, 0.f, 0.f, 1.f);
+	else if (d_1 < d_2 && d_1 < d_3)
+		color = (float4)(1.f * color_value, 0.f, 0.3f * color_value, 1.f);
+	else if (d_2 < d_1 && d_2 < d_3)
+		color = (float4)(0.f, 1.f * color_value, 0.3f * color_value, 1.f);
+	else
+		color = (float4)(0.f, 0.3f * color_value, 1.f * color_value, 1.f);
+
+	pixels[get_global_id(1) * get_global_size(0) + get_global_id(0)] = color;
 }

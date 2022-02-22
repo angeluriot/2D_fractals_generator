@@ -1,16 +1,16 @@
 #include "Simulator.hpp"
 
-Mandelbrot::Mandelbrot()
+Newton_2::Newton_2()
 {
 	reset();
 }
 
-Fractal::Type Mandelbrot::get_type() const
+Fractal::Type Newton_2::get_type() const
 {
-	return Type::Mandelbrot;
+	return Type::Newton_2;
 }
 
-void Mandelbrot::menu()
+void Newton_2::menu()
 {
 	bool changed = false;
 
@@ -18,8 +18,6 @@ void Mandelbrot::menu()
 
 	ImGui::Text("The max iterations number:");
 	changed = ImGui::SliderInt("##max_iteration", &max_iterations, 1, 10000, NULL, ImGuiSliderFlags_Logarithmic) || changed;
-
-	changed = ColorPallet::menu(pallet_index) || changed;
 
 	ImGui::NewLine();
 
@@ -31,18 +29,16 @@ void Mandelbrot::menu()
 		Simulator::image_done = false;
 }
 
-void Mandelbrot::reset()
+void Newton_2::reset()
 {
-	Simulator::position = { -0.45, 0. };
-	max_iterations = 100;
-	pallet_index = 0;
+	max_iterations = 30;
 	smooth = true;
 	image.reset(dim::Window::get_size().x, dim::Window::get_size().y);
 }
 
-void Mandelbrot::compute()
+void Newton_2::compute()
 {
-	ComputeShader::choose_function("mandelbrot");
+	ComputeShader::choose_function("newton_2");
 	ComputeShader::add_argument(image.buffer);
 	ComputeShader::add_argument(max_iterations);
 	ComputeShader::add_argument(Simulator::position[0]);
@@ -52,25 +48,7 @@ void Mandelbrot::compute()
 	double area_height = Simulator::area_width * ((double)dim::Window::get_size().y / (double)dim::Window::get_size().x);
 
 	ComputeShader::add_argument(area_height);
-
-	cl::Buffer pallet = ComputeShader::Buffer(ColorPallet::pallets[pallet_index], Permissions::Read);
-	int size;
-
-	if (pallet_index == ColorPallet::rgb)
-		size = -1;
-
-	else if (pallet_index == ColorPallet::black_or_white)
-		size = -2;
-
-	else
-		size = (int)ColorPallet::pallets[pallet_index].size() - 1;
-
-	ComputeShader::add_argument(pallet);
-	ComputeShader::add_argument(size);
-
-	int smooth_int = (size > 0 ? smooth : 1);
-
-	ComputeShader::add_argument(smooth_int);
+	ComputeShader::add_argument((int)smooth);
 
 	ComputeShader::launch(cl::NDRange(dim::Window::get_size().x, dim::Window::get_size().y));
 

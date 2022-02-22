@@ -16,7 +16,9 @@ public:
 		Julia		= 0,
 		Mandelbrot	= 1,
 		BurningShip	= 2,
-		Buddhabrot	= 3
+		Buddhabrot	= 3,
+		Newton_1	= 4,
+		Newton_2	= 5
 	};
 
 	static Image image;

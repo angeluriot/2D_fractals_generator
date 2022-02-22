@@ -17,7 +17,7 @@ void Simulator::init()
 
 void Simulator::reset()
 {
-	area_width = 4.;
+	area_width = 5.;
 	position = { 0., 0. };
 	fractal->reset();
 	image_done = false;

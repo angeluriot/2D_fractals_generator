@@ -24,14 +24,21 @@ void Buddhabrot::menu()
 	ImGui::Text("The number of points:");
 	changed = ImGui::SliderInt("##nb_points", &nb_points, 1, 100000000, NULL, ImGuiSliderFlags_Logarithmic) || changed;
 
+	ImGui::NewLine();
+
+	ImGui::Text("The brightness of the points:");
+	changed = ImGui::SliderFloat("##brightness", &brightness, 0.1f, 100.f, "%.2f", ImGuiSliderFlags_Logarithmic) || changed;
+
 	if (changed)
 		Simulator::image_done = false;
 }
 
 void Buddhabrot::reset()
 {
-	max_iterations = 1000;
-	nb_points = 10000;
+	Simulator::position = { -0.25, 0. };
+	max_iterations = 1500;
+	nb_points = 500000;
+	brightness = 50.f;
 	image.reset(dim::Window::get_size().x, dim::Window::get_size().y);
 }
 
@@ -53,6 +60,7 @@ void Buddhabrot::compute_color(const cl::Buffer& points_buffer, int color_id, in
 	std::array<int, 2> screen_size = { dim::Window::get_size().x, dim::Window::get_size().y };
 
 	ComputeShader::add_argument(screen_size);
+	ComputeShader::add_argument(brightness);
 
 	ComputeShader::launch(cl::NDRange(nb_points));
 }

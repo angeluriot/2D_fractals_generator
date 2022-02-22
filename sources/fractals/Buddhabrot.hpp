@@ -7,8 +7,9 @@ class Buddhabrot : public Fractal
 {
 public:
 
-	int max_iterations;
-	int nb_points;
+	int		max_iterations;
+	int		nb_points;
+	float	brightness;
 
 	Buddhabrot();
 	Buddhabrot(const Buddhabrot& other) = default;

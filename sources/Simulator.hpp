@@ -8,6 +8,8 @@
 #include "fractals/Mandelbrot.hpp"
 #include "fractals/BurningShip.hpp"
 #include "fractals/Buddhabrot.hpp"
+#include "fractals/Newton_1.hpp"
+#include "fractals/Newton_2.hpp"
 #include "compute_shader/ComputeShader.hpp"
 #include "compute_shader/Image.hpp"
 #include "renderer/ColorPallet.hpp"

@@ -84,7 +84,7 @@ public:
 	 * @param argument the argument to add
 	 */
 	template <typename T>
-	static void add_argument(T& argument)
+	static void add_argument(const T& argument)
 	{
 		kernel.setArg(argument_nb++, argument);
 	}
