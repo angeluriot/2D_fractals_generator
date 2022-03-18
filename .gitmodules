@@ -1,3 +1,6 @@
 [submodule "libraries/Dimension3D"]
 	path = libraries/Dimension3D
 	url = https://github.com/angeluriot/Dimension3D
+[submodule "libraries/GLEW"]
+	path = libraries/GLEW
+	url = https://github.com/Perlmint/glew-cmake/
