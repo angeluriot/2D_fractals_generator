@@ -104,7 +104,7 @@ If you just want to test the program without editing the source code, go see the
 ### Buddhabrot
 
 <p align="center">
-	<img src="https://raw.githubusercontent.com/angeluriot/2D_fractals_generator/master/resources/misc/Buddhabrot.jpg" width="500">
+	<img src="https://raw.githubusercontent.com/angeluriot/2D_fractals_generator/master/resources/misc/Buddhabrot.png" width="500">
 </p>
 
 <br/>
