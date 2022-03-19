@@ -3,25 +3,21 @@
 ![Release](https://img.shields.io/badge/Release-v4.0-blueviolet)
 ![Language](https://img.shields.io/badge/Language-C%2B%2B-0052cf)
 ![Libraries](https://img.shields.io/badge/Libraries-Dimension3D_OpenCL-00cf2c)
-![Size](https://img.shields.io/badge/Size-204Mo-f12222)
+![Size](https://img.shields.io/badge/Size-227Mo-f12222)
 ![Open Source](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)
 
 <br/>
 
-⚠️ This repository contains **submodules**, add `--recurse-submodules` when cloning:
-
-```shell
-$ git clone --recurse-submodules https://github.com/angeluriot/2D_fractals_generator
-```
+This program generate images of fractals like the Mandelbrot set, the Julia set, the Birning Ship, the Buddhabrot or Newton fractals.
 
 <br/>
 
-This repository contains the source code of...
+⚠️ This repository contains **submodules**, add `--recurse-submodules` when cloning ⚠️
 
 <br/>
 
 <p align="center">
-	<img src="https://raw.githubusercontent.com/angeluriot/2D_fractals_generator/new_version/resources/misc/Fractal.gif" width="700">
+	<img src="" width="700">
 </p>
 
 <br/>
@@ -32,27 +28,44 @@ This repository contains the source code of...
 * **[Video](#video)**
 * **[Features](#features)**
 * **[Install](#install)**
+	* [Skeleton project install](#skeleton-project-install)
+	* [Additionnal dependecies](#additionnal-dependecies)
 * **[Releases](#releases)**
 * **[Tests](#tests)**
+	* [Julia](#julia)
+	* [Mandelbrot](#mandelbrot)
+	* [Burning Ship](#burning-ship)
+	* [Buddhabrot](#buddhabrot)
+	* [Newton](#newton)
 * **[Credits](#credits)**
 
 <br/>
 
 # Video
 
-Here is a video explaining how the algorithm works : [<u>**titre**</u>](url).
+Soon...
 
 <br/>
 
 # Features
 
-* ...
+* It can generate the Mandelbrot set, the Julia set, the Birning Ship, the Buddhabrot or Newton fractals
+
+* A menu to choose the fractal to generate and the parameters
+
+* An interactive 2D camera to move and zoom in the fractal
 
 <br/>
 
 # Install
 
-This repository is based on my [**Graphics skeleton project**](https://github.com/angeluriot/Graphics_skeleton), so go see its [**install**](https://github.com/angeluriot/Graphics_skeleton#install) part.
+### Skeleton project install
+
+This repository is based on my [**Graphics skeleton project**](https://github.com/angeluriot/Graphics_skeleton), so go see its [**install**](https://github.com/angeluriot/Graphics_skeleton#install) part first.
+
+### Additionnal dependecies
+
+Then, you will also need the [**OpenCL**](https://www.khronos.org/opencl/) library.
 
 <br/>
 
@@ -64,7 +77,47 @@ If you just want to test the program without editing the source code, go see the
 
 # Tests
 
-...
+### Julia
+
+<p align="center">
+	<img src="" width="500">
+</p>
+
+<br/>
+
+### Mandelbrot
+
+<p align="center">
+	<img src="" width="500">
+</p>
+
+<br/>
+
+### Burning Ship
+
+<p align="center">
+	<img src="" width="500">
+</p>
+
+<br/>
+
+### Buddhabrot
+
+<p align="center">
+	<img src="" width="500">
+</p>
+
+<br/>
+
+### Newton
+
+<p align="center">
+	<img src="" width="500">
+</p>
+
+<p align="center">
+	<img src="" width="500">
+</p>
 
 <br/>
 
