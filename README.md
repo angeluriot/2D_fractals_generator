@@ -21,7 +21,7 @@ This repository contains the source code of...
 <br/>
 
 <p align="center">
-	<img src="https://www.angeluriot.com/storage/gifs/Fractal.gif" width="700">
+	<img src="https://raw.githubusercontent.com/angeluriot/2D_fractals_generator/new_version/resources/misc/Fractal.gif" width="700">
 </p>
 
 <br/>
