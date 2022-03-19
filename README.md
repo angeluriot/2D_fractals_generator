@@ -8,6 +8,14 @@
 
 <br/>
 
+⚠️ This repository contains **submodules**, add `--recurse-submodules` when cloning:
+
+```shell
+$ git clone --recurse-submodules https://github.com/angeluriot/2D_fractals_generator
+```
+
+<br/>
+
 This repository contains the source code of...
 
 <br/>
