@@ -7,9 +7,3 @@
 [submodule "libraries/GLM"]
 	path = libraries/GLM
 	url = https://github.com/g-truc/glm
-[submodule "libraries/SFML-built"]
-	path = libraries/SFML-built
-	url = https://github.com/angeluriot/SFML-built
-[submodule "libraries/ImGui-built"]
-	path = libraries/ImGui-built
-	url = https://github.com/angeluriot/ImGui-built
