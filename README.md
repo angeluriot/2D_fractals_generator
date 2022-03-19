@@ -17,7 +17,7 @@ This program generate images of fractals like the Mandelbrot set, the Julia set,
 <br/>
 
 <p align="center">
-	<img src="" width="700">
+	<img src="https://raw.githubusercontent.com/angeluriot/2D_fractals_generator/master/resources/misc/Newton_2.png" width="700" style="border-radius: 20px;">
 </p>
 
 <br/>
@@ -80,7 +80,7 @@ If you just want to test the program without editing the source code, go see the
 ### Julia
 
 <p align="center">
-	<img src="" width="500">
+	<img src="https://raw.githubusercontent.com/angeluriot/2D_fractals_generator/master/resources/misc/Julia.png" width="500" style="border-radius: 20px;">
 </p>
 
 <br/>
@@ -88,7 +88,7 @@ If you just want to test the program without editing the source code, go see the
 ### Mandelbrot
 
 <p align="center">
-	<img src="" width="500">
+	<img src="https://raw.githubusercontent.com/angeluriot/2D_fractals_generator/master/resources/misc/Mandelbrot.png" width="500" style="border-radius: 20px;">
 </p>
 
 <br/>
@@ -96,7 +96,7 @@ If you just want to test the program without editing the source code, go see the
 ### Burning Ship
 
 <p align="center">
-	<img src="" width="500">
+	<img src="https://raw.githubusercontent.com/angeluriot/2D_fractals_generator/master/resources/misc/Burning_ship.png" width="500" style="border-radius: 20px;">
 </p>
 
 <br/>
@@ -104,7 +104,7 @@ If you just want to test the program without editing the source code, go see the
 ### Buddhabrot
 
 <p align="center">
-	<img src="" width="500">
+	<img src="https://raw.githubusercontent.com/angeluriot/2D_fractals_generator/master/resources/misc/Buddhabrot.jpg" width="500" style="border-radius: 20px;">
 </p>
 
 <br/>
@@ -112,11 +112,11 @@ If you just want to test the program without editing the source code, go see the
 ### Newton
 
 <p align="center">
-	<img src="" width="500">
+	<img src="https://raw.githubusercontent.com/angeluriot/2D_fractals_generator/master/resources/misc/Newton_1.png" width="500" style="border-radius: 20px;">
 </p>
 
 <p align="center">
-	<img src="" width="500">
+	<img src="https://raw.githubusercontent.com/angeluriot/2D_fractals_generator/master/resources/misc/Newton_2.png" width="500" style="border-radius: 20px;">
 </p>
 
 <br/>
