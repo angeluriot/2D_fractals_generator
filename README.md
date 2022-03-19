@@ -12,10 +12,6 @@ This program generate images of fractals like the Mandelbrot or the Julia set.
 
 <br/>
 
-<p align="center">
-	<img src="https://www.angeluriot.com/storage/gifs/Fractal.gif" width="700">
-</p>
-
 <br/>
 
 # Dependencies
