@@ -8,5 +8,7 @@
 #include <memory>
 #include <array>
 #include <sstream>
+#include <iostream>
+#include <filesystem>
 
 #endif

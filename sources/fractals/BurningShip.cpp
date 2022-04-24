@@ -33,7 +33,7 @@ void BurningShip::menu()
 
 void BurningShip::reset()
 {
-	Simulator::position = { -0.25, -0.53 };
+	Simulator::position = { -0.25, 0.53 };
 	max_iterations = 100;
 	pallet_index = 1;
 	smooth = true;

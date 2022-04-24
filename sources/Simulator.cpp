@@ -27,7 +27,7 @@ std::array<double, 2> Simulator::screen_to_world(dim::Vector2int pos)
 {
 	double area_height = area_width * ((double)dim::Window::get_size().y / (double)dim::Window::get_size().x);
 	double x = (((double)pos.x / (double)dim::Window::get_size().x) - 0.5) * area_width + position[0];
-	double y = (((double)pos.y / (double)dim::Window::get_size().y) - 0.5) * area_height + position[1];
+	double y = -((((double)pos.y / (double)dim::Window::get_size().y) - 0.5) * area_height - position[1]);
 
 	return { x, y };
 }
@@ -36,7 +36,7 @@ dim::Vector2int Simulator::world_to_screen(std::array<double, 2> pos)
 {
 	double area_height = area_width * ((double)dim::Window::get_size().y / (double)dim::Window::get_size().x);
 	int x = (((pos[0] - position[0]) / area_width) + 0.5) * dim::Window::get_size().x;
-	int y = (((pos[1] - position[1]) / area_height) + 0.5) * dim::Window::get_size().y;
+	int y = dim::Window::get_size().y - ((((pos[1] + position[1]) / area_height) + 0.5) * dim::Window::get_size().y);
 	return dim::Vector2int(x, y);
 }
 
@@ -89,7 +89,18 @@ void Simulator::check_events(const sf::Event& sf_event)
 
 	if (sf_event.type == sf::Event::KeyPressed && sf_event.key.code == sf::Keyboard::F2)
 	{
-		Fractal::image.save("screens/test.png");
+		Fractal::image.save("screens");
+	}
+
+	if (sf_event.type == sf::Event::MouseButtonPressed && sf_event.key.code == sf::Mouse::Right && Simulator::fractal->get_type() == Fractal::Type::Mandelbrot)
+	{
+		auto pos = screen_to_world(sf::Mouse::getPosition(dim::Window::get_window()));
+		std::cout << pos[0] << " + " << pos[1] << "i" << std::endl;
+		delete fractal;
+		fractal = new Julia();
+		reset();
+		((Julia*)Simulator::fractal)->c[0] = pos[0];
+		((Julia*)Simulator::fractal)->c[1] = pos[1];
 	}
 }
 

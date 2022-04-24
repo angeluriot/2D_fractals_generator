@@ -17,7 +17,7 @@ public:
 	void reset(unsigned int width, unsigned int height);
 	void fill(const dim::Color& color);
 	void update(unsigned int width, unsigned int height);
-	void save(const std::string& filename);
+	void save(std::string folder);
 };
 
 #endif

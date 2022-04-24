@@ -41,15 +41,51 @@ void Image::update(unsigned int width, unsigned int height)
 	texture.unbind();
 }
 
-void Image::save(const std::string& filename)
+int get_value_from_name(std::string name)
 {
-	static int nb = 1;
+	if (name.substr(0, 7) == "screen_")
+	{
+		name = name.substr(7);
+
+		if (name.substr(name.size() - 4) == ".png")
+		{
+			name = name.substr(0, name.size() - 4);
+
+			try
+			{
+				return std::stoi(name);
+			}
+
+			catch (const std::exception& e)
+			{
+				return -1;
+			}
+		}
+	}
+
+	return -1;
+}
+
+void Image::save(std::string folder)
+{
+	folder += folder.back() == '/' ? "" : "/";
+
 	sf::Image sf_image;
 	sf_image.create(dim::Window::get_size().x, dim::Window::get_size().y);
 
 	for (int i = 0; i < dim::Window::get_size().x; i++)
 		for (int j = 0; j < dim::Window::get_size().y; j++)
-			sf_image.setPixel(i, j, data[j * dim::Window::get_size().x + i].to_sf());
+			sf_image.setPixel(i, dim::Window::get_size().y - 1 - j, data[j * dim::Window::get_size().x + i].to_sf());
 
-	sf_image.saveToFile(filename + "_" + std::to_string(nb++));
+	int nb = -1;
+
+	for (const auto & entry : std::filesystem::directory_iterator(folder))
+	{
+		int value = get_value_from_name(entry.path().filename().string());
+
+		if (value > nb)
+			nb = value;
+	}
+
+	sf_image.saveToFile(folder + "screen_" + std::to_string(nb + 1) + ".png");
 }

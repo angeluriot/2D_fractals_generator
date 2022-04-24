@@ -112,7 +112,6 @@ real2_t square(real2_t z)
 	return multiply(z, z);
 }
 
-
 float4 get_color(float iterations, float max_iterations, float4* pallet, int colors_nb)
 {
 	float value = iterations / max_iterations;
@@ -146,7 +145,7 @@ __kernel void julia(__global float4* pixels, float c_r, float c_i, int max_itera
 	float4 color = (float4)(0.f, 0.f, 0.f, 0.f);
 
 	number.x = ((real_t)get_global_id(0) / (real_t)get_global_size(0)) * width + position_x - width / 2.;
-	number.y = ((real_t)(get_global_size(1) - 1 - get_global_id(1)) / (real_t)get_global_size(1)) * height + position_y - height / 2.;
+	number.y = ((real_t)(get_global_size(1) - 1 - get_global_id(1)) / (real_t)get_global_size(1)) * height - position_y - height / 2.;
 	real_t smooth_value = exp(-length(number));
 
 	float max_modulus;
@@ -191,7 +190,7 @@ __kernel void mandelbrot(__global float4* pixels, int max_iterations, real_t pos
 	real_t arg = (real_t)(0.);
 
 	c.x = ((real_t)get_global_id(0) / (real_t)get_global_size(0)) * width + position_x - width / 2.;
-	c.y = ((real_t)(get_global_size(1) - 1 - get_global_id(1)) / (real_t)get_global_size(1)) * height + position_y - height / 2.;
+	c.y = ((real_t)(get_global_size(1) - 1 - get_global_id(1)) / (real_t)get_global_size(1)) * height - position_y - height / 2.;
 
 	float max_modulus;
 
@@ -234,7 +233,7 @@ __kernel void burning_ship(__global float4* pixels, int max_iterations, real_t p
 	float4 color = (float4)(0.f, 0.f, 0.f, 0.f);
 
 	c.x = ((real_t)get_global_id(0) / (real_t)get_global_size(0)) * width + position_x - width / 2.;
-	c.y = ((real_t)(get_global_size(1) - 1 - get_global_id(1)) / (real_t)get_global_size(1)) * height + position_y - height / 2.;
+	c.y = ((real_t)(get_global_size(1) - 1 - get_global_id(1)) / (real_t)get_global_size(1)) * height - position_y - height / 2.;
 
 	float max_modulus;
 
@@ -318,10 +317,10 @@ __kernel void buddhabrot(__global float4* pixels, __global real2_t* points, int 
 			if (i > 3)
 			{
 				pos.x = (int)(((number.x + width / 2. - position_x) / width) * (real_t)screen_size.x);
-				pos.y = screen_size.y - 1 - (int)(((number.y + height / 2. - position_y) / height) * (real_t)screen_size.y);
+				pos.y = screen_size.y - 1 - (int)(((number.y + height / 2. + position_y) / height) * (real_t)screen_size.y);
 				set_pixel(pixels, pos, screen_size, color_id, max_iterations, brightness);
 
-				pos.y = screen_size.y - 1 - (int)(((-number.y + height / 2. - position_y) / height) * (real_t)screen_size.y);
+				pos.y = screen_size.y - 1 - (int)(((-number.y + height / 2. + position_y) / height) * (real_t)screen_size.y);
 				set_pixel(pixels, pos, screen_size, color_id, max_iterations, brightness);
 			}
 		}
@@ -346,7 +345,7 @@ __kernel void newton_1(__global float4* pixels, int max_iterations, real_t posit
 	float4 color = (float4)(0.f, 0.f, 0.f, 0.f);
 
 	x.x = ((real_t)get_global_id(0) / (real_t)get_global_size(0)) * width + position_x - width / 2.;
-	x.y = ((real_t)(get_global_size(1) - 1 - get_global_id(1)) / (real_t)get_global_size(1)) * height + position_y - height / 2.;
+	x.y = ((real_t)(get_global_size(1) - 1 - get_global_id(1)) / (real_t)get_global_size(1)) * height - position_y - height / 2.;
 
 	while (d_min > threshold && i < max_iterations)
 	{
@@ -393,7 +392,7 @@ __kernel void newton_2(__global float4* pixels, int max_iterations, real_t posit
 	float4 color = (float4)(0.f, 0.f, 0.f, 0.f);
 
 	p_3.x = ((real_t)get_global_id(0) / (real_t)get_global_size(0)) * width + position_x - width / 2.;
-	p_3.y = ((real_t)(get_global_size(1) - 1 - get_global_id(1)) / (real_t)get_global_size(1)) * height + position_y - height / 2.;
+	p_3.y = ((real_t)(get_global_size(1) - 1 - get_global_id(1)) / (real_t)get_global_size(1)) * height - position_y - height / 2.;
 
 	real_t d_1 = (real_t)(length(p_1));
 	real_t d_2 = (real_t)(length(p_2));
