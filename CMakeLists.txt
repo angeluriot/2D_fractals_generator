@@ -7,9 +7,9 @@ project(2D_fractals_generator)
 file(GLOB_RECURSE SOURCES sources/*.cpp)
 file(GLOB_RECURSE HEADERS sources/*.hpp sources/*.h)
 
-#if(MSVC)
-	#set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
-#endif()
+if(MSVC)
+	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
+endif()
 
 # Executable
 add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
