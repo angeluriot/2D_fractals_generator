@@ -7,16 +7,41 @@ class Image
 {
 public:
 
-	dim::Texture texture;
-	std::vector<dim::Color> data;
-	cl::Buffer buffer;
+	dim::Texture texture;			// The texture filled with the image data.
+	std::vector<dim::Color> data;	// The image data.
+	cl::Buffer buffer;				// The OpenCL buffer containing the image data.
 
 	Image() = default;
 	Image(const Image& other) = default;
 
+	/**
+	 * @brief Clear the texture and the data.
+	 *
+	 * @param width the new width of the image
+	 * @param height the new height of the image
+	 */
 	void reset(unsigned int width, unsigned int height);
+
+	/**
+	 * @brief Fill the image with a color.
+	 *
+	 * @param color the color to fill the image with
+	 */
 	void fill(const dim::Color& color);
+
+	/**
+	 * @brief Update the texture with the image data.
+	 *
+	 * @param width the width of the image
+	 * @param height the height of the image
+	 */
 	void update(unsigned int width, unsigned int height);
+
+	/**
+	 * @brief Save the image.
+	 *
+	 * @param folder the folder to save the image to
+	 */
 	void save(std::string folder);
 };
 

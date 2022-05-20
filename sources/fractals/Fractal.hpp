@@ -21,11 +21,30 @@ public:
 		Newton_2	= 5
 	};
 
-	static Image image;
+	static Image image;	// The image of the fractal.
 
+	int max_iterations; // The max iterations number.
+
+	/**
+	 * @brief Give the type of the fractal.
+	 *
+	 * @return the type of the fractal
+	 */
 	virtual Type get_type() const = 0;
+
+	/**
+	 * @brief Show the menu of the fractal.
+	 */
 	virtual void menu() = 0;
+
+	/**
+	 * @brief Reset the fractal settings.
+	 */
 	virtual void reset() = 0;
+
+	/**
+	 * @brief Compute the fractal image.
+	 */
 	virtual void compute() = 0;
 };
 

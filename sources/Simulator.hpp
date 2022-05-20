@@ -21,10 +21,10 @@ class Simulator
 {
 public:
 
-	static Fractal*					fractal;
+	static Fractal*					fractal;	// The fractal to compute.
 	static double					area_width;	// The width of the area on the screen.
 	static std::array<double, 2>	position;	// The center of the area on the screen.
-	static bool						image_done;
+	static bool						image_done;	// True if the image is computed.
 
 	/**
 	 * @brief Initialize the simulation.
@@ -36,9 +36,25 @@ public:
 	 */
 	static void reset();
 
+	/**
+	 * @brief Transform a screen position to a fractal position.
+	 *
+	 * @param position the screen position
+	 * @return the fractal position
+	 */
 	static std::array<double, 2> screen_to_world(dim::Vector2int position);
+
+	/**
+	 * @brief Transform a fractal position to a screen position.
+	 *
+	 * @param position the fractal position
+	 * @return the screen position
+	 */
 	static dim::Vector2int world_to_screen(std::array<double, 2> position);
 
+	/**
+	 * @brief Handle the events of the simulation.
+	 */
 	static void update();
 
 	/**

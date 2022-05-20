@@ -7,7 +7,6 @@ class BurningShip : public Fractal
 {
 public:
 
-	int		max_iterations;
 	int		pallet_index;
 	bool	smooth;
 

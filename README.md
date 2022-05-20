@@ -25,7 +25,6 @@ This program generate images of fractals like the Mandelbrot set, the Julia set,
 # Summary
 
 * **[Summary](#summary)**
-* **[Video](#video)**
 * **[Features](#features)**
 * **[Install](#install)**
 	* [Skeleton project install](#skeleton-project-install)
@@ -38,12 +37,6 @@ This program generate images of fractals like the Mandelbrot set, the Julia set,
 	* [Buddhabrot](#buddhabrot)
 	* [Newton](#newton)
 * **[Credits](#credits)**
-
-<br/>
-
-# Video
-
-Soon...
 
 <br/>
 

@@ -43,6 +43,12 @@ public:
 	static void display();
 };
 
+/**
+ * @brief Transform a double into a string.
+ *
+ * @param value the double value
+ * @return the resulting string
+ */
 std::string to_string(const double& value);
 
 #endif

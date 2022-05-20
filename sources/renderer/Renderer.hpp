@@ -11,7 +11,7 @@ class Renderer
 {
 public:
 
-	static dim::VertexBuffer	screen;
+	static dim::VertexBuffer screen; // The screen buffer.
 
 	/**
 	 * @brief Initialize the renderer.

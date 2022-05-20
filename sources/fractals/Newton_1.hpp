@@ -7,7 +7,6 @@ class Newton_1 : public Fractal
 {
 public:
 
-	int						max_iterations;
 	std::array<float, 2>	p_1;
 	std::array<float, 2>	p_2;
 	std::array<float, 2>	p_3;

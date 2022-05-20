@@ -7,7 +7,6 @@ class Newton_2 : public Fractal
 {
 public:
 
-	int						max_iterations;
 	bool					smooth;
 
 	Newton_2();
