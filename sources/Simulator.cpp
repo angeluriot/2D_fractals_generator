@@ -3,6 +3,7 @@
 Fractal*				Simulator::fractal;
 double					Simulator::area_width;
 std::array<double, 2>	Simulator::position;
+bool					Simulator::moving_point;
 bool					Simulator::image_done;
 
 void Simulator::init()
@@ -17,6 +18,8 @@ void Simulator::init()
 
 void Simulator::reset()
 {
+	dim::Window::set_cull_face(false);
+	moving_point = false;
 	area_width = 5.;
 	position = { 0., 0. };
 	fractal->reset();
@@ -26,8 +29,9 @@ void Simulator::reset()
 std::array<double, 2> Simulator::screen_to_world(dim::Vector2int pos)
 {
 	double area_height = area_width * ((double)dim::Window::get_size().y / (double)dim::Window::get_size().x);
+
 	double x = (((double)pos.x / (double)dim::Window::get_size().x) - 0.5) * area_width + position[0];
-	double y = -((((double)pos.y / (double)dim::Window::get_size().y) - 0.5) * area_height - position[1]);
+	double y = (((double)(dim::Window::get_size().y - pos.y) / (double)dim::Window::get_size().y) - 0.5) * area_height + position[1];
 
 	return { x, y };
 }
@@ -35,8 +39,10 @@ std::array<double, 2> Simulator::screen_to_world(dim::Vector2int pos)
 dim::Vector2int Simulator::world_to_screen(std::array<double, 2> pos)
 {
 	double area_height = area_width * ((double)dim::Window::get_size().y / (double)dim::Window::get_size().x);
+
 	int x = (((pos[0] - position[0]) / area_width) + 0.5) * dim::Window::get_size().x;
-	int y = dim::Window::get_size().y - ((((pos[1] + position[1]) / area_height) + 0.5) * dim::Window::get_size().y);
+	int y = dim::Window::get_size().y - ((((pos[1] - position[1]) / area_height) + 0.5) * dim::Window::get_size().y);
+
 	return dim::Vector2int(x, y);
 }
 
@@ -47,7 +53,7 @@ void Simulator::update()
 	dim::Vector2int mouse_pos = sf::Mouse::getPosition(dim::Window::get_window());
 
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && !Menu::active && mouse_pos.x >= 0 && mouse_pos.x <= dim::Window::get_size().x &&
-		mouse_pos.y >= 0 && mouse_pos.y <= dim::Window::get_size().y)
+		mouse_pos.y >= 0 && mouse_pos.y <= dim::Window::get_size().y && !moving_point && fractal->get_type() != Fractal::Type::Buddhabrot)
 	{
 		position[0] -= screen_to_world(mouse_pos)[0] - screen_to_world(prev_mouse_pos)[0];
 		position[1] -= screen_to_world(mouse_pos)[1] - screen_to_world(prev_mouse_pos)[1];
@@ -95,7 +101,6 @@ void Simulator::check_events(const sf::Event& sf_event)
 	if (sf_event.type == sf::Event::MouseButtonPressed && sf_event.key.code == sf::Mouse::Right && Simulator::fractal->get_type() == Fractal::Type::Mandelbrot)
 	{
 		auto pos = screen_to_world(sf::Mouse::getPosition(dim::Window::get_window()));
-		std::cout << pos[0] << " + " << pos[1] << "i" << std::endl;
 		delete fractal;
 		fractal = new Julia();
 		reset();

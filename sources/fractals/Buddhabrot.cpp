@@ -17,17 +17,17 @@ void Buddhabrot::menu()
 	ImGui::NewLine();
 
 	ImGui::Text("The max iterations number:");
-	changed = ImGui::SliderInt("##max_iteration", &max_iterations, 1, 10000, NULL, ImGuiSliderFlags_Logarithmic) || changed;
+	changed = ImGui::SliderInt("##max_iteration", &max_iterations, 100, 10000, NULL, ImGuiSliderFlags_Logarithmic) || changed;
 
 	ImGui::NewLine();
 
 	ImGui::Text("The number of points:");
-	changed = ImGui::SliderInt("##nb_points", &nb_points, 1, 100000000, NULL, ImGuiSliderFlags_Logarithmic) || changed;
+	changed = ImGui::SliderInt("##nb_points", &nb_points, 1000, 100000000, NULL, ImGuiSliderFlags_Logarithmic) || changed;
 
 	ImGui::NewLine();
 
 	ImGui::Text("The brightness of the points:");
-	changed = ImGui::SliderFloat("##brightness", &brightness, 0.1f, 100.f, "%.2f", ImGuiSliderFlags_Logarithmic) || changed;
+	changed = ImGui::SliderFloat("##brightness", &brightness, 0.1f, 10.f, "%.2f", ImGuiSliderFlags_Logarithmic) || changed;
 
 	if (changed)
 		Simulator::image_done = false;
@@ -36,9 +36,9 @@ void Buddhabrot::menu()
 void Buddhabrot::reset()
 {
 	Simulator::position = { -0.25, 0. };
-	max_iterations = 1500;
-	nb_points = 500000;
-	brightness = 50.f;
+	max_iterations = 5000;
+	nb_points = 300000;
+	brightness = 1.f;
 	image.reset(dim::Window::get_size().x, dim::Window::get_size().y);
 }
 
@@ -48,6 +48,7 @@ void Buddhabrot::compute_color(const cl::Buffer& points_buffer, int color_id, in
 	ComputeShader::add_argument(image.buffer);
 	ComputeShader::add_argument(points_buffer);
 	ComputeShader::add_argument(current_max_iterations);
+	ComputeShader::add_argument(nb_points);
 	ComputeShader::add_argument(Simulator::position[0]);
 	ComputeShader::add_argument(Simulator::position[1]);
 	ComputeShader::add_argument(Simulator::area_width);
@@ -77,8 +78,6 @@ void Buddhabrot::compute()
 	cl::Buffer points_buffer = ComputeShader::Buffer(points, Permissions::Read);
 
 	Buddhabrot::compute_color(points_buffer, 0, max_iterations);
-	Buddhabrot::compute_color(points_buffer, 1, max_iterations / 10);
-	Buddhabrot::compute_color(points_buffer, 2, max_iterations / 100);
 
-	image.update(dim::Window::get_size().x, dim::Window::get_size().y);
+	image.update();
 }

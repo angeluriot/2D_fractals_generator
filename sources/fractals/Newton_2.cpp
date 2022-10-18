@@ -17,7 +17,7 @@ void Newton_2::menu()
 	ImGui::NewLine();
 
 	ImGui::Text("The max iterations number:");
-	changed = ImGui::SliderInt("##max_iteration", &max_iterations, 1, 10000, NULL, ImGuiSliderFlags_Logarithmic) || changed;
+	changed = ImGui::SliderInt("##max_iteration", &max_iterations, 1, 15000, NULL, ImGuiSliderFlags_Logarithmic) || changed;
 
 	ImGui::NewLine();
 
@@ -52,5 +52,5 @@ void Newton_2::compute()
 
 	ComputeShader::launch(cl::NDRange(dim::Window::get_size().x, dim::Window::get_size().y));
 
-	image.update(dim::Window::get_size().x, dim::Window::get_size().y);
+	image.update();
 }

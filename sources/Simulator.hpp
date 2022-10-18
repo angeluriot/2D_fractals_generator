@@ -21,10 +21,11 @@ class Simulator
 {
 public:
 
-	static Fractal*					fractal;	// The fractal to compute.
-	static double					area_width;	// The width of the area on the screen.
-	static std::array<double, 2>	position;	// The center of the area on the screen.
-	static bool						image_done;	// True if the image is computed.
+	static Fractal*					fractal;		// The fractal to compute.
+	static double					area_width;		// The width of the area on the screen.
+	static std::array<double, 2>	position;		// The center of the area on the screen.
+	static bool						moving_point;	// True if the user is moving a Newton's point.
+	static bool						image_done;		// True if the image is computed.
 
 	/**
 	 * @brief Initialize the simulation.

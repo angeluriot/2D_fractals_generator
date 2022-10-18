@@ -8,6 +8,8 @@ class BurningShip : public Fractal
 public:
 
 	int		pallet_index;
+	float	color_range;
+	float	color_shift;
 	bool	smooth;
 
 	BurningShip();

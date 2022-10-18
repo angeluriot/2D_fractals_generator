@@ -22,9 +22,19 @@ void Julia::menu()
 	ImGui::NewLine();
 
 	ImGui::Text("The max iterations number:");
-	changed = ImGui::SliderInt("##max_iteration", &max_iterations, 1, 10000, NULL, ImGuiSliderFlags_Logarithmic) || changed;
+	changed = ImGui::SliderInt("##max_iteration", &max_iterations, 10, 15000, NULL, ImGuiSliderFlags_Logarithmic) || changed;
 
 	changed = ColorPallet::menu(pallet_index) || changed;
+
+	ImGui::NewLine();
+
+	ImGui::Text("The range of the colors:");
+	changed = ImGui::SliderFloat("##color_range", &color_range, 0.01f, 10.f, NULL, ImGuiSliderFlags_Logarithmic) || changed;
+
+	ImGui::NewLine();
+
+	ImGui::Text("The shift of the colors:");
+	changed = ImGui::SliderFloat("##color_shift", &color_shift, 0.f, 1.f) || changed;
 
 	ImGui::NewLine();
 
@@ -41,6 +51,8 @@ void Julia::reset()
 	c = { 0.f, 0.f };
 	max_iterations = 100;
 	pallet_index = 0;
+	color_range = 3.f;
+	color_shift = 0.f;
 	smooth = true;
 	image.reset(dim::Window::get_size().x, dim::Window::get_size().y);
 }
@@ -74,11 +86,13 @@ void Julia::compute()
 
 	ComputeShader::add_argument(pallet);
 	ComputeShader::add_argument(size);
+	ComputeShader::add_argument(color_range);
+	ComputeShader::add_argument(color_shift);
 
 	int smooth_int = (size > 0 ? smooth : 1);
 	ComputeShader::add_argument(smooth_int);
 
 	ComputeShader::launch(cl::NDRange(dim::Window::get_size().x, dim::Window::get_size().y));
 
-	image.update(dim::Window::get_size().x, dim::Window::get_size().y);
+	image.update();
 }

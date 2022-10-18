@@ -10,6 +10,7 @@ public:
 	dim::Texture texture;			// The texture filled with the image data.
 	std::vector<dim::Color> data;	// The image data.
 	cl::Buffer buffer;				// The OpenCL buffer containing the image data.
+	dim::Vector2int size;
 
 	Image() = default;
 	Image(const Image& other) = default;
@@ -31,11 +32,8 @@ public:
 
 	/**
 	 * @brief Update the texture with the image data.
-	 *
-	 * @param width the width of the image
-	 * @param height the height of the image
 	 */
-	void update(unsigned int width, unsigned int height);
+	void update();
 
 	/**
 	 * @brief Save the image.

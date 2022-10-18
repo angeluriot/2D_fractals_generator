@@ -1,6 +1,6 @@
 # 2D fractals generator
 
-![Release](https://img.shields.io/badge/Release-v4.0-blueviolet)
+![Release](https://img.shields.io/badge/Release-v4.1-blueviolet)
 ![Language](https://img.shields.io/badge/Language-C%2B%2B-0052cf)
 ![Libraries](https://img.shields.io/badge/Libraries-Dimension3D_OpenCL-00cf2c)
 ![Size](https://img.shields.io/badge/Size-227Mo-f12222)
@@ -8,7 +8,7 @@
 
 <br/>
 
-This program generate images of fractals like the Mandelbrot set, the Julia set, the Birning Ship, the Buddhabrot or Newton fractals.
+This program generate images of fractals like the Mandelbrot set, the Julia set, the Burning Ship, the Buddhabrot or Newton fractals.
 
 <br/>
 
@@ -25,6 +25,7 @@ This program generate images of fractals like the Mandelbrot set, the Julia set,
 # Summary
 
 * **[Summary](#summary)**
+* **[Video](#video)**
 * **[Features](#features)**
 * **[Install](#install)**
 	* [Skeleton project install](#skeleton-project-install)
@@ -40,13 +41,21 @@ This program generate images of fractals like the Mandelbrot set, the Julia set,
 
 <br/>
 
+# Video
+
+Here is a video explaining how the algorithm works : **[Comment Générer des Fractales ? ❄️](https://www.youtube.com/watch?v=wUlVFYJIUNA)**.
+
+<br/>
+
 # Features
 
-* It can generate the Mandelbrot set, the Julia set, the Birning Ship, the Buddhabrot or Newton fractals
+* It can generate the Mandelbrot set, the Julia set, the Burning Ship, the Buddhabrot or Newton fractals
 
 * A menu to choose the fractal to generate and the parameters
 
 * An interactive 2D camera to move and zoom in the fractal
+
+* Save screens with F2
 
 <br/>
 

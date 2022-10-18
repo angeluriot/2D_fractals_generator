@@ -2,8 +2,9 @@
 
 void Image::reset(unsigned int width, unsigned int height)
 {
+	size = dim::Vector2int(width, height);
 	data.clear();
-	data.resize(width * height);
+	data.resize(size.x * size.y);
 	buffer = ComputeShader::Buffer(data, Permissions::Write);
 
 	GLuint id;
@@ -31,12 +32,12 @@ void Image::fill(const dim::Color& color)
 	buffer = ComputeShader::Buffer(data, Permissions::Write);
 }
 
-void Image::update(unsigned int width, unsigned int height)
+void Image::update()
 {
 	ComputeShader::get_data(buffer, data);
 
 	texture.bind();
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_FLOAT, (GLvoid*)data.data());
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, size.x, size.y, 0, GL_RGBA, GL_FLOAT, (GLvoid*)data.data());
 		glGenerateMipmap(GL_TEXTURE_2D);
 	texture.unbind();
 }
@@ -69,13 +70,23 @@ int get_value_from_name(std::string name)
 void Image::save(std::string folder)
 {
 	folder += folder.back() == '/' ? "" : "/";
+	std::filesystem::create_directories("./" + folder);
 
 	sf::Image sf_image;
-	sf_image.create(dim::Window::get_size().x, dim::Window::get_size().y);
+	sf_image.create(size.x, size.y);
 
-	for (int i = 0; i < dim::Window::get_size().x; i++)
-		for (int j = 0; j < dim::Window::get_size().y; j++)
-			sf_image.setPixel(i, dim::Window::get_size().y - 1 - j, data[j * dim::Window::get_size().x + i].to_sf());
+	for (int i = 0; i < size.x; i++)
+		for (int j = 0; j < size.y; j++)
+		{
+			dim::Color color = data[j * size.x + i];
+
+			if (color.r > 1.f) color.r = 1.f;
+			if (color.g > 1.f) color.g = 1.f;
+			if (color.b > 1.f) color.b = 1.f;
+			color.a = 1.f;
+
+			sf_image.setPixel(i, j, color.to_sf());
+		}
 
 	int nb = -1;
 

@@ -5,7 +5,12 @@ dim::VertexBuffer	Renderer::screen;
 void Renderer::init()
 {
 	dim::Shader::add("post", "shaders/post.vert", "shaders/post.frag");
-	screen.send_data("post", dim::Mesh::screen, dim::DataType::Positions | dim::DataType::TexCoords);
+	dim::Mesh temp = dim::Mesh::screen;
+
+	for (auto& pos : temp.positions)
+		pos = dim::Vector3(pos.x, -pos.y, 0.5);
+
+	screen.send_data("post", temp, dim::DataType::Positions | dim::DataType::TexCoords);
 }
 
 void Renderer::draw()

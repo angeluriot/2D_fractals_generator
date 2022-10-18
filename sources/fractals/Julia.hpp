@@ -9,6 +9,8 @@ public:
 
 	std::array<float, 2>	c;
 	int						pallet_index;
+	float					color_range;
+	float					color_shift;
 	bool					smooth;
 
 	Julia();
