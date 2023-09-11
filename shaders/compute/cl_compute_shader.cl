@@ -112,7 +112,7 @@ real2_t square(real2_t z)
 	return multiply(z, z);
 }
 
-float4 get_color(float iterations, float max_iterations, float4* pallet, int colors_nb)
+float4 get_color(float iterations, float max_iterations, __global float4* pallet, int colors_nb)
 {
 	float value = iterations / max_iterations;
 	float4 color = (float4)(1.f, 1.f, 1.f, 1.f);
@@ -278,7 +278,7 @@ __kernel void burning_ship(__global float4* pixels, int max_iterations, real_t p
 	pixels[get_global_id(1) * get_global_size(0) + get_global_id(0)] = color;
 }
 
-void set_pixel(float4* pixels, int2 pos, int2 screen_size, int i, int max_iterations, int nb_points, float brightness)
+void set_pixel(__global float4* pixels, int2 pos, int2 screen_size, int i, int max_iterations, int nb_points, float brightness)
 {
 	if (pos.x >= 0 && pos.x < screen_size.x && pos.y >= 0 && pos.y < screen_size.y)
 	{
