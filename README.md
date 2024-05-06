@@ -1,4 +1,4 @@
-# 2D fractals generator
+# ❄️ 2D fractals generator
 
 ![Release](https://img.shields.io/badge/Release-v4.1-blueviolet)
 ![Language](https://img.shields.io/badge/Language-C%2B%2B-0052cf)
@@ -22,32 +22,27 @@ This program generate images of fractals like the Mandelbrot set, the Julia set,
 
 <br/>
 
-# Summary
+# 📋 Summary
 
-* **[Summary](#summary)**
-* **[Video](#video)**
-* **[Features](#features)**
-* **[Install](#install)**
-	* [Skeleton project install](#skeleton-project-install)
-	* [Additionnal dependecies](#additionnal-dependecies)
-* **[Releases](#releases)**
-* **[Tests](#tests)**
-	* [Julia](#julia)
-	* [Mandelbrot](#mandelbrot)
-	* [Burning Ship](#burning-ship)
-	* [Buddhabrot](#buddhabrot)
-	* [Newton](#newton)
-* **[Credits](#credits)**
+* **[📋 Summary](#-summary)**
+* **[🎥 Video](#-video)**
+* **[✨ Features](#-features)**
+* **[🛠️ Install](#%EF%B8%8F-install)**
+	* [🦴 Skeleton project install](#-skeleton-project-install)
+	* [📦 Additionnal dependecies](#-additionnal-dependecies)
+* **[🗓️ Releases](#%EF%B8%8F-releases)**
+* **[🧪 Tests](#-tests)**
+* **[🙏 Credits](#-credits)**
 
 <br/>
 
-# Video
+# 🎥 Video
 
 Here is a video explaining how the algorithm works : **[Comment Générer des Fractales ? ❄️](https://www.youtube.com/watch?v=wUlVFYJIUNA)**.
 
 <br/>
 
-# Features
+# ✨ Features
 
 * It can generate the Mandelbrot set, the Julia set, the Burning Ship, the Buddhabrot or Newton fractals
 
@@ -59,25 +54,27 @@ Here is a video explaining how the algorithm works : **[Comment Générer des Fr
 
 <br/>
 
-# Install
+# 🛠️ Install
 
-### Skeleton project install
+## 🦴 Skeleton project install
 
 This repository is based on my [**Graphics skeleton project**](https://github.com/angeluriot/Graphics_skeleton), so go see its [**install**](https://github.com/angeluriot/Graphics_skeleton#install) part first.
 
-### Additionnal dependecies
+<br/>
+
+## 📦 Additionnal dependecies
 
 Then, you will also need the [**OpenCL**](https://www.khronos.org/opencl/) library.
 
 <br/>
 
-# Releases
+# 🗓️ Releases
 
 If you just want to test the program without editing the source code, go see the [**Releases**](https://github.com/angeluriot/2D_fractals_generator/releases).
 
 <br/>
 
-# Tests
+# 🧪 Tests
 
 ### Julia
 
@@ -123,6 +120,6 @@ If you just want to test the program without editing the source code, go see the
 
 <br/>
 
-# Credits
+# 🙏 Credits
 
 * [**Angel Uriot**](https://github.com/angeluriot) : Creator of the project.
